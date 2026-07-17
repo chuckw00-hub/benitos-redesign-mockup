@@ -3,790 +3,1552 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Benito's Hot Sauce — Product Page Redesign Concept</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;1,400&family=Libre+Franklin:wght@400;500&display=swap" rel="stylesheet">
+  <title>Benito's Hot Sauce — Homepage Redesign Concept</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Libre+Franklin:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    /* ===== DESIGN TOKENS ===== */
     :root {
-      --clr-fire: #E85D26;
-      --clr-fire-dark: #C44A18;
-      --clr-green: #627647;
-      --clr-cream: #F7EBC4;
-      --clr-rule: #D4C89A;
-      --clr-charcoal: #2A2A2A;
-      --clr-charcoal-soft: #444;
-      --clr-muted: #6B5D4F;
-      --clr-bg: #FDFAF3;
-      --clr-surface: #FFFFFF;
+      --clr-fire: #FF4500;        /* OrangeRed — primary action, CTAs */
+      --clr-fire-dark: #CC2200;   /* Deep red for hover states */
+      --clr-fire-bright: #FF6A00; /* Bright orange accent */
+      --clr-pepper: #B80000;      /* Deep chili red — headers, accents */
+      --clr-green: #1A6B00;       /* Vermont forest green */
+      --clr-green-bright: #2E9E00;/* Bright green accent */
+      --clr-gold: #D4A000;        /* Spicy gold/mustard */
+      --clr-charcoal: #2A2A2A;    /* Original charcoal for dark sections */
+      --clr-charcoal-soft: #444444;
+      --clr-surface: #FFFFFF;     /* Card/surface background — original white */
+      --clr-surface-2: #F5F0E8;   /* Warm off-white for card image wells */
+      --clr-cream: #FFE066;       /* Punchy yellow — replaces pale cream text */
+      --clr-text: #1A1A1A;        /* Primary text on light */
+      --clr-text-muted: #CC3A00;  /* Hot orange for muted text instead of gray */
+      --clr-rule: #FF4500;        /* Fire dividers */
+      --clr-bg: #FDFAF3;          /* Original warm off-white page background */
+
       --font-display: 'Nunito', sans-serif;
       --font-editorial: 'Lora', serif;
       --font-body: 'Libre Franklin', system-ui, sans-serif;
+
       --radius: 4px;
       --radius-lg: 8px;
       --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
       --shadow-md: 0 6px 24px rgba(0,0,0,0.12);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.16);
+
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 32px;
+      --space-lg: 64px;
+      --space-xl: 96px;
+
+      --max-w: 1280px;
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; }
-    body { font-family: var(--font-body); background: var(--clr-bg); color: var(--clr-charcoal); line-height: 1.6; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      line-height: 1.6;
+    }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
 
-    /* Nav (same as homepage) */
-    .announce-bar { background: var(--clr-charcoal); color: var(--clr-cream); text-align: center; padding: 10px 32px; font-size: 13px; letter-spacing: 0.5px; font-family: var(--font-display); font-weight: 700; }
+    /* ===== GRAIN TEXTURE OVERLAY (CSS, no raster) ===== */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.4;
+      z-index: 1;
+    }
+    .grain > * { position: relative; z-index: 2; }
+
+    /* ===== LAYOUT ===== */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--space-md); }
+    .section { padding: var(--space-lg) 0; }
+    .section--tight { padding: var(--space-md) 0; }
+
+    /* ===== ANNOUNCEMENT BAR ===== */
+    .announce-bar {
+      background: var(--clr-charcoal);
+      color: var(--clr-cream);
+      text-align: center;
+      padding: 10px var(--space-md);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
     .announce-bar strong { color: var(--clr-fire); }
-    .nav { background: rgba(42,42,42,0.96); color: var(--clr-cream); border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 100; }
-    .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .nav__logo { font-family: var(--font-display); font-weight: 900; font-size: 20px; letter-spacing: 1px; color: var(--clr-cream); }
-    .nav__links { display: flex; gap: 24px; list-style: none; font-size: 13px; letter-spacing: 0.8px; text-transform: uppercase; font-weight: 700; }
-    .nav__links a { color: rgba(247,235,196,0.7); }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-image:
+        linear-gradient(rgba(42,42,42,0.92), rgba(42,42,42,0.96)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px,
+          transparent 1px, transparent 40px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px,
+          transparent 1px, transparent 40px
+        );
+      color: var(--clr-cream);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: var(--space-md);
+    }
+    .nav__logo {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--clr-cream);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .nav__logo-flame {
+      width: 28px;
+      height: 28px;
+    }
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      list-style: none;
+      font-size: 13px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .nav__links a { color: rgba(247,235,196,0.8); transition: color 0.2s; }
     .nav__links a:hover { color: var(--clr-cream); }
-    .nav__cart-btn { background: var(--clr-fire); color: white; border: none; padding: 8px 18px; border-radius: 4px; font-family: var(--font-display); font-weight: 700; font-size: 13px; cursor: pointer; }
+    .nav__links a.active { color: var(--clr-fire); }
+    .nav__actions { display: flex; align-items: center; gap: var(--space-sm); }
+    .nav__cart-btn {
+      background: var(--clr-fire);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .nav__cart-btn:hover { background: var(--clr-fire-dark); }
 
-    /* Breadcrumb */
-    .breadcrumb { padding: 16px 0; font-size: 12px; color: var(--clr-muted); }
-    .breadcrumb a { color: var(--clr-muted); }
-    .breadcrumb a:hover { color: var(--clr-charcoal); }
-    .breadcrumb span { margin: 0 6px; }
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 700px;
+      background: var(--clr-charcoal);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://v3b.fal.media/files/b/0aa29275/1HMrTaeSRKWavti6b2dBs_T7AHnZgl.png');
+      background-size: cover;
+      background-position: center center;
+    }
+    /* Gradient on left so text box area is darker and more legible */
+    .hero__bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(5,2,0,0.55) 0%, rgba(5,2,0,0.25) 50%, transparent 100%);
+    }
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--space-xl) var(--space-lg);
+      width: 44%;
+      max-width: 520px;
+    }
+    .hero__text-box {
+      background: rgba(10, 5, 0, 0.72);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      border-left: 4px solid var(--clr-fire);
+      border-radius: 6px;
+      padding: 24px 28px 28px;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 460px;
+    }
+    .hero__eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--clr-fire);
+      margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero__eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 2px;
+      background: var(--clr-fire);
+      flex-shrink: 0;
+    }
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.5vw, 62px);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--clr-cream);
+      margin-bottom: var(--space-sm);
+    }
+    .hero__title em {
+      font-style: normal;
+      color: var(--clr-fire);
+    }
+    .hero__subtitle {
+      font-family: var(--font-editorial);
+      font-style: italic;
+      font-size: 18px;
+      color: rgba(247,235,196,0.7);
+      margin-bottom: var(--space-md);
+      max-width: 400px;
+      line-height: 1.5;
+    }
+    .hero__actions {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--clr-fire);
+      color: white;
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary:hover { background: var(--clr-fire-dark); transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--clr-cream);
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      border: 1.5px solid rgba(247,235,196,0.4);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: var(--clr-cream); color: var(--clr-cream); }
 
-    /* Product Layout */
-    .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; padding: 32px 0 64px; align-items: start; }
+    .hero__visual {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .hero__bottle-stage {
+      position: relative;
+      width: 500px;
+      height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero__bottle-bg {
+      position: absolute;
+      inset: -20px;
+      background: radial-gradient(ellipse at center, rgba(232,93,38,0.22) 0%, transparent 60%);
+      border-radius: 50%;
+    }
+    /* Real bottle image */
+    .hero__bottle-img {
+      position: relative;
+      z-index: 2;
+      width: 460px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 40px 80px rgba(0,0,0,0.5)) drop-shadow(0 8px 24px rgba(232,93,38,0.35));
+      transform: rotate(3deg) translateY(-40px);
+      transition: transform 0.4s ease;
+    }
+    .hero__bottle-img:hover {
+      transform: rotate(0deg) translateY(-40px) scale(1.05);
+    }
 
-    /* Gallery */
-    .gallery__main {
-      background: #F0E8D4;
-      border-radius: 12px;
+    .hero__badge {
+      position: absolute;
+      bottom: 40px;
+      right: 20px;
+      background: var(--clr-green);
+      color: white;
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 11px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: var(--shadow-md);
+      transform: rotate(-8deg);
+    }
+    .hero__badge-year { font-size: 18px; letter-spacing: 0; }
+
+    .trust-strip {
+      background: var(--clr-fire);
+      border-top: 3px solid var(--clr-fire-dark);
+      border-bottom: 3px solid var(--clr-fire-dark);
+    }
+    .trust-strip__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      padding: 14px var(--space-md);
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .trust-icon { font-size: 18px; }
+
+    /* ===== SECTION HEADERS ===== */
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-md);
+    }
+    .section-eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--clr-fire);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .section-subtitle {
+      font-family: var(--font-editorial);
+      font-style: italic;
+      color: var(--clr-text-muted);
+      font-size: 17px;
+      margin-top: 8px;
+    }
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--clr-fire);
+      border-radius: 2px;
+      margin: 12px auto 0;
+    }
+
+    /* ===== HEAT SCALE ===== */
+    .heat-scale {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .heat-scale__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--clr-text-muted);
+      margin-right: 2px;
+    }
+    .flame { font-size: 14px; }
+    .flame--on { filter: none; opacity: 1; }
+    .flame--off { opacity: 0.2; filter: grayscale(1); }
+
+    /* ===== PRODUCT CARDS ===== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+    }
+    .product-card {
+      background: var(--clr-surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(255,69,0,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(255,69,0,0.2);
+      border-color: var(--clr-fire);
+    }
+    .product-card__img-wrap {
+      position: relative;
+      background: #F5F0E8;
       aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       overflow: hidden;
     }
-    .gallery__main img { width: 65%; height: 65%; object-fit: contain; }
-    .gallery__badge {
+    .product-card__img-wrap img {
+      width: 75%;
+      height: 75%;
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+    .product-card:hover .product-card__img-wrap img { transform: scale(1.06); }
+    .product-card__badge {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      background: var(--clr-charcoal);
-      color: var(--clr-cream);
+      top: 10px;
+      left: 10px;
+      background: var(--clr-fire);
+      color: white;
       font-family: var(--font-display);
       font-size: 10px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      padding: 5px 10px;
+      padding: 4px 8px;
       border-radius: 2px;
     }
-    .gallery__thumbs { display: flex; gap: 12px; margin-top: 16px; }
-    .gallery__thumb {
-      width: 72px;
-      height: 72px;
-      background: #F0E8D4;
-      border-radius: 8px;
-      border: 2px solid transparent;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      transition: border-color 0.2s;
-    }
-    .gallery__thumb.active { border-color: var(--clr-fire); }
-    .gallery__thumb:hover { border-color: var(--clr-charcoal-soft); }
-
-    /* Product Info */
-    .product-info {}
-    .product-info__collection {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--clr-green);
-      margin-bottom: 8px;
-    }
-    .product-info__title {
-      font-family: var(--font-display);
-      font-size: clamp(26px, 3vw, 38px);
-      font-weight: 900;
-      line-height: 1.15;
-      color: var(--clr-charcoal);
-      margin-bottom: 12px;
-    }
-    .product-info__subtitle {
-      font-family: var(--font-editorial);
-      font-style: italic;
-      color: var(--clr-muted);
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    /* Rating */
-    .product-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-    .stars { color: #F5A623; font-size: 16px; letter-spacing: 2px; }
-    .rating-count { font-size: 13px; color: var(--clr-muted); }
-    .rating-count a { color: var(--clr-fire); text-decoration: underline; }
-
-    /* Price */
-    .product-price {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      margin-bottom: 24px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--clr-rule);
-    }
-    .price-main { font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--clr-charcoal); }
-    .price-size { font-size: 16px; color: var(--clr-muted); }
-    .free-ship-nudge {
-      background: #E8F5E0;
-      border: 1px solid #B8D8A0;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-family: var(--font-display);
-      font-weight: 700;
-      color: #3A6020;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Heat Scale — THE KEY UX */
-    .heat-section {
-      background: var(--clr-surface);
-      border: 1px solid var(--clr-rule);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-    .heat-section__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .heat-section__title {
-      font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--clr-charcoal-soft);
-    }
-    .heat-section__level {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 14px;
-      color: var(--clr-fire);
-    }
-    .heat-bar-wrapper {
-      position: relative;
-      margin-bottom: 12px;
-    }
-    .heat-bar-track {
-      height: 12px;
-      border-radius: 6px;
-      background: linear-gradient(to right, #F5A623, #E85D26, #C44A18, #8B1010, #4A0505);
-      position: relative;
-    }
-    .heat-bar-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      border-radius: 6px;
-      transition: width 0.5s ease;
-    }
-    .heat-bar-mask {
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: 100%;
-      background: rgba(240,232,212,0.85);
-      border-radius: 0 6px 6px 0;
-      transition: width 0.5s ease;
-    }
-    .heat-bar-marker {
-      position: absolute;
-      top: -4px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border: 3px solid var(--clr-fire);
-      border-radius: 50%;
-      transform: translateX(-50%);
-      transition: left 0.5s ease;
-      box-shadow: 0 2px 6px rgba(232,93,38,0.4);
-    }
-    .heat-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--clr-muted);
-      margin-top: 6px;
-    }
-    .heat-comparisons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-    .heat-chip {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid;
-      font-family: var(--font-display);
-      font-weight: 700;
-      letter-spacing: 0.3px;
-    }
-    .heat-chip--context { background: rgba(232,93,38,0.08); border-color: rgba(232,93,38,0.3); color: var(--clr-fire-dark); }
-    .heat-chip--scoville { background: rgba(98,118,71,0.08); border-color: rgba(98,118,71,0.3); color: var(--clr-green); }
-
-    /* Flavor Profile */
-    .flavor-profile {
-      margin-bottom: 24px;
-    }
-    .flavor-profile__title {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--clr-charcoal-soft);
-      margin-bottom: 12px;
-    }
-    .flavor-bars { display: flex; flex-direction: column; gap: 8px; }
-    .flavor-bar { display: grid; grid-template-columns: 100px 1fr 40px; align-items: center; gap: 12px; }
-    .flavor-bar__label { font-size: 13px; color: var(--clr-muted); font-weight: 500; }
-    .flavor-bar__track { height: 6px; background: rgba(212,200,154,0.5); border-radius: 3px; position: relative; overflow: hidden; }
-    .flavor-bar__fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 3px; }
-    .flavor-bar__val { font-size: 12px; font-weight: 700; color: var(--clr-charcoal-soft); text-align: right; }
-
-    /* Quantity + Add to Cart */
-    .purchase-section { margin-bottom: 24px; }
-    .purchase-section__label {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-      color: var(--clr-charcoal-soft);
-    }
-    .qty-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-    .qty-ctrl {
-      display: flex;
-      align-items: center;
-      border: 1.5px solid var(--clr-rule);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .qty-btn {
-      width: 40px;
-      height: 48px;
-      border: none;
-      background: var(--clr-bg);
-      font-size: 18px;
-      cursor: pointer;
-      color: var(--clr-charcoal);
-      transition: background 0.15s;
-      font-family: var(--font-display);
-      font-weight: 700;
-    }
-    .qty-btn:hover { background: var(--clr-cream); }
-    .qty-num {
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 16px;
-      border-left: 1.5px solid var(--clr-rule);
-      border-right: 1.5px solid var(--clr-rule);
-    }
-    .btn-add-to-cart {
-      flex: 1;
-      height: 52px;
-      background: var(--clr-charcoal);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
+    .product-card__badge--new { background: var(--clr-green); }
+    .product-card__body { padding: 16px; }
+    .product-card__name {
       font-family: var(--font-display);
       font-weight: 800;
       font-size: 15px;
-      letter-spacing: 0.5px;
+      color: var(--clr-charcoal);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .product-card__flavor-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .flavor-tag {
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.3px;
+      padding: 3px 7px;
+      border-radius: 2px;
+      background: rgba(255,69,0,0.15);
+      color: var(--clr-text-muted);
+      border: 1px solid rgba(255,69,0,0.3);
+    }
+    .product-card__footer {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,69,0,0.2);
     }
-    .btn-add-to-cart:hover { background: var(--clr-fire); transform: translateY(-1px); }
-    .btn-buy-now {
-      width: 100%;
-      height: 52px;
+    .product-card__price {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--clr-pepper);
+    }
+    .product-card__size {
+      font-size: 12px;
+      color: var(--clr-text-muted);
+      font-weight: 400;
+    }
+    .add-btn {
       background: var(--clr-fire);
       color: white;
       border: none;
       border-radius: var(--radius);
+      padding: 8px 14px;
       font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 15px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 10px;
-    }
-    .btn-buy-now:hover { background: var(--clr-fire-dark); }
-
-    /* Free shipping threshold bar */
-    .shipping-bar {
-      background: var(--clr-surface);
-      border: 1px solid var(--clr-rule);
-      border-radius: var(--radius);
-      padding: 12px 16px;
-      margin-top: 12px;
-      font-size: 13px;
-    }
-    .shipping-bar__text { margin-bottom: 8px; font-family: var(--font-display); font-weight: 600; color: var(--clr-charcoal-soft); }
-    .shipping-bar__text strong { color: var(--clr-green); }
-    .shipping-bar__track { height: 6px; background: var(--clr-rule); border-radius: 3px; overflow: hidden; }
-    .shipping-bar__fill { height: 100%; width: 18%; background: var(--clr-green); border-radius: 3px; transition: width 0.5s; }
-
-    /* Product details tabs */
-    .product-tabs { border-top: 1px solid var(--clr-rule); margin-top: 32px; }
-    .tabs-nav { display: flex; gap: 0; border-bottom: 1px solid var(--clr-rule); margin-bottom: 24px; }
-    .tab-btn {
-      padding: 14px 20px;
-      border: none;
-      border-bottom: 3px solid transparent;
-      background: transparent;
-      font-family: var(--font-display);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .add-btn:hover { background: var(--clr-fire-dark); }
+
+    /* ===== BRAND STORY STRIP ===== */
+    .brand-story {
+      background: var(--clr-charcoal);
+      color: var(--clr-cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .brand-story__bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 0% 50%, rgba(98,118,71,0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 50%, rgba(232,93,38,0.12) 0%, transparent 50%);
+    }
+    .brand-story__inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      align-items: center;
+      padding: var(--space-xl) var(--space-md);
+    }
+    .brand-story__quote {
+      font-family: var(--font-editorial);
+      font-size: clamp(22px, 3vw, 32px);
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--clr-cream);
+    }
+    .brand-story__quote strong {
+      font-style: normal;
+      color: var(--clr-fire);
+      font-family: var(--font-display);
+      font-size: 0.9em;
+      font-weight: 900;
+    }
+    .brand-story__byline {
+      margin-top: var(--space-sm);
+      font-family: var(--font-display);
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(247,235,196,0.6);
+    }
+    .brand-story__stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: var(--space-sm) 20px;
+    }
+    .stat-card__num {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--clr-fire);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-card__label {
+      font-size: 12px;
+      color: rgba(247,235,196,0.6);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      cursor: pointer;
-      color: var(--clr-muted);
-      transition: color 0.2s, border-color 0.2s;
-      margin-bottom: -1px;
+      font-weight: 700;
     }
-    .tab-btn.active { color: var(--clr-charcoal); border-bottom-color: var(--clr-fire); }
-    .tab-btn:hover { color: var(--clr-charcoal); }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .tab-content p { font-size: 15px; line-height: 1.7; color: var(--clr-charcoal-soft); margin-bottom: 16px; }
-    .tab-content ul { list-style: none; padding: 0; }
-    .tab-content ul li { padding: 8px 0; border-bottom: 1px solid var(--clr-rule); font-size: 14px; color: var(--clr-charcoal-soft); }
-    .tab-content ul li:last-child { border-bottom: none; }
 
-    /* Upsell / Frequently bought together */
-    .upsell {
-      background: var(--clr-cream);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      margin-top: 48px;
+    /* ===== NEW ARRIVALS ===== */
+    .new-arrivals { background: var(--clr-cream); }
+    .arrivals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
     }
-    .upsell__title { font-family: var(--font-display); font-size: 15px; font-weight: 800; margin-bottom: 16px; }
-    .upsell-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .upsell-item {
-      background: var(--clr-surface);
-      border-radius: var(--radius);
-      padding: 12px;
+    .arrival-card {
+      background: var(--clr-charcoal);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      color: var(--clr-cream);
+      transition: transform 0.2s;
+    }
+    .arrival-card:hover { transform: translateY(-3px); }
+    .arrival-card__img {
+      background: linear-gradient(135deg, #1A1208, #2E2010);
       display: flex;
       align-items: center;
-      gap: 12px;
-      border: 1px solid rgba(212,200,154,0.5);
-      cursor: pointer;
-      transition: border-color 0.2s;
+      justify-content: center;
+      min-height: 200px;
+      position: relative;
+      overflow: hidden;
     }
-    .upsell-item:hover { border-color: var(--clr-fire); }
-    .upsell-item__img { width: 48px; height: 48px; background: #F0E8D4; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
-    .upsell-item__name { font-family: var(--font-display); font-size: 13px; font-weight: 700; margin-bottom: 2px; }
-    .upsell-item__price { font-size: 12px; color: var(--clr-muted); }
-    .upsell-item__add { margin-left: auto; font-size: 18px; color: var(--clr-fire); flex-shrink: 0; }
-
-    /* Reviews */
-    .reviews-section { margin-top: 64px; }
-    .reviews-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .reviews-title { font-family: var(--font-display); font-size: 24px; font-weight: 900; }
-    .reviews-summary { display: flex; align-items: center; gap: 24px; }
-    .reviews-big-num { font-family: var(--font-display); font-size: 48px; font-weight: 900; line-height: 1; }
-    .reviews-stars-big { font-size: 24px; color: #F5A623; }
-    .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .review-card {
-      background: var(--clr-surface);
-      border: 1px solid var(--clr-rule);
-      border-radius: var(--radius-lg);
-      padding: 20px;
+    .arrival-card__img-placeholder {
+      font-size: 64px;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
     }
-    .review-card__header { display: flex; justify-content: space-between; margin-bottom: 10px; }
-    .review-card__name { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
-    .review-card__date { font-size: 12px; color: var(--clr-muted); }
-    .review-card__stars { color: #F5A623; font-size: 14px; margin-bottom: 8px; }
-    .review-card__text { font-size: 14px; color: var(--clr-charcoal-soft); line-height: 1.6; }
-    .review-card__product-tag {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 11px;
-      background: var(--clr-cream);
-      padding: 3px 8px;
-      border-radius: 2px;
+    .arrival-card__content {
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .arrival-card__new-badge {
       font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--clr-fire);
+      margin-bottom: 10px;
+    }
+    .arrival-card__title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .arrival-card__desc {
+      font-size: 14px;
+      color: rgba(247,235,196,0.7);
+      line-height: 1.5;
+      margin-bottom: var(--space-sm);
+    }
+
+    /* ===== HEAT EXPLORER ===== */
+    .heat-explorer {
+      background: var(--clr-bg);
+      border-top: 3px solid var(--clr-fire);
+    }
+    .heat-levels {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: var(--space-md);
+    }
+    .heat-level-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: var(--clr-surface);
+      border: 2px solid rgba(255,69,0,0.3);
+      border-radius: var(--radius-lg);
+      padding: var(--space-sm) 24px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      min-width: 140px;
+    }
+    .heat-level-btn:hover, .heat-level-btn.active {
+      border-color: var(--clr-fire);
+      background: #FFF0EB;
+      transform: translateY(-2px);
+    }
+    .heat-level-btn__flames { font-size: 20px; letter-spacing: 2px; }
+    .heat-level-btn__name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--clr-charcoal);
+    }
+    .heat-level-btn__desc {
+      font-size: 11px;
+      color: var(--clr-text-muted);
+      text-align: center;
+    }
+    .heat-level-btn.active .heat-level-btn__name { color: var(--clr-fire); }
+
+    /* ===== RECIPES ===== */
+    .recipes { background: var(--clr-cream); }
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+    }
+    .recipe-card {
+      background: var(--clr-surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(255,69,0,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .recipe-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255,69,0,0.25); border-color: var(--clr-fire); }
+    .recipe-card__thumb {
+      height: 180px;
+      background: linear-gradient(135deg, #8B2000, #CC3A00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      position: relative;
+    }
+    .recipe-card__sauce-tag {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: var(--clr-fire);
+      color: #fff;
+      font-size: 10px;
       font-weight: 700;
-      color: var(--clr-muted);
+      padding: 4px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .recipe-card__body { padding: 16px; }
+    .recipe-card__title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: var(--clr-charcoal);
+    }
+    .recipe-card__meta {
+      display: flex;
+      gap: var(--space-sm);
+      font-size: 12px;
+      color: var(--clr-text-muted);
+    }
+
+    /* ===== FARM SOURCING STRIP ===== */
+    .farm-strip {
+      background: var(--clr-green);
+      color: white;
+      padding: var(--space-md) 0;
+    }
+    .farm-strip__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+    .farm-stat {
+      text-align: center;
+    }
+    .farm-stat__num {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .farm-stat__label {
+      font-size: 12px;
+      opacity: 0.85;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    .farm-strip__divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* ===== EMAIL CAPTURE ===== */
+    .email-capture {
+      background: var(--clr-charcoal);
+      color: var(--clr-cream);
+      text-align: center;
+      padding: var(--space-lg) var(--space-md);
+    }
+    .email-capture__title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .email-capture__sub {
+      font-family: var(--font-editorial);
+      font-style: italic;
+      color: rgba(247,235,196,0.7);
+      margin-bottom: var(--space-md);
+    }
+    .email-form {
+      display: flex;
+      gap: 0;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .email-form input {
+      flex: 1;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(247,235,196,0.3);
+      border-right: none;
+      border-radius: var(--radius) 0 0 var(--radius);
+      color: var(--clr-cream);
+      font-size: 14px;
+      font-family: var(--font-body);
+      outline: none;
+    }
+    .email-form input::placeholder { color: rgba(247,235,196,0.4); }
+    .email-form input:focus { border-color: var(--clr-fire); }
+    .email-form button {
+      padding: 14px 24px;
+      background: var(--clr-fire);
+      color: white;
+      border: none;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .email-form button:hover { background: var(--clr-fire-dark); }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background:
+        linear-gradient(rgba(20,14,6,0.96), rgba(20,14,6,0.96)),
+        repeating-linear-gradient(
+          88deg,
+          rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px,
+          transparent 1px, transparent 52px
+        );
+      color: rgba(247,235,196,0.7);
+      padding: var(--space-lg) 0 var(--space-md);
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+    .footer__brand-name {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 18px;
+      color: var(--clr-cream);
+      margin-bottom: var(--space-xs);
+    }
+    .footer__brand-tagline {
+      font-family: var(--font-editorial);
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(247,235,196,0.5);
+      margin-bottom: var(--space-sm);
+    }
+    .footer__col-title {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(247,235,196,0.4);
+      margin-bottom: var(--space-sm);
+    }
+    .footer__links { list-style: none; }
+    .footer__links li { margin-bottom: 8px; }
+    .footer__links a { font-size: 14px; transition: color 0.2s; }
+    .footer__links a:hover { color: var(--clr-cream); }
+    .footer__bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer__bottom a { color: var(--clr-fire); }
+
+    /* ===== ANNOTATION LABELS (mockup helper) ===== */
+    .mockup-note {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: rgba(0,120,200,0.9);
+      color: white;
+      font-size: 10px;
+      padding: 3px 6px;
+      border-radius: 0 0 0 4px;
+      font-family: monospace;
+      z-index: 99;
+      pointer-events: none;
+    }
+    body.show-notes .mockup-note { display: block; }
+    body.show-notes [data-note] { position: relative; outline: 2px dashed rgba(0,120,200,0.4); }
+
+    /* Tweaks panel */
+    .tweaks {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      background: var(--clr-charcoal);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      color: var(--clr-cream);
+      font-family: var(--font-display);
+      font-size: 12px;
+      box-shadow: var(--shadow-lg);
+      min-width: 200px;
+    }
+    .tweaks__title {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(247,235,196,0.5);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .tweaks label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      color: rgba(247,235,196,0.8);
+    }
+    .tweaks input { cursor: pointer; }
+    .tweaks__note {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 10px;
+      color: rgba(247,235,196,0.4);
+      line-height: 1.5;
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
-      .product-main { grid-template-columns: 1fr; gap: 32px; }
-      .upsell-items { grid-template-columns: 1fr; }
-      .review-grid { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero__visual { display: none; }
+      .hero__content { padding: var(--space-lg) var(--space-md); }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .brand-story__inner { grid-template-columns: 1fr; gap: var(--space-md); }
+      .arrivals-grid { grid-template-columns: 1fr; }
+      .arrival-card { grid-template-columns: 140px 1fr; }
+      .recipes-grid { grid-template-columns: 1fr 1fr; }
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .recipes-grid { grid-template-columns: 1fr; }
+      .trust-strip__inner { gap: var(--space-md); }
+      .footer__grid { grid-template-columns: 1fr; }
       .nav__links { display: none; }
+      .email-form { flex-direction: column; }
+      .email-form input { border-right: 1.5px solid rgba(247,235,196,0.3); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; }
+      .email-form button { border-radius: 0 0 var(--radius) var(--radius); }
     }
   </style>
 </head>
 <body>
 
+<!-- ===== ANNOUNCEMENT BAR ===== -->
 <div class="announce-bar">
-  🔥 <strong>FREE SHIPPING</strong> on all orders over $50 · $7.49 flat rate under $50
+  🔥 <strong>FREE SHIPPING</strong> on all orders over $50 &nbsp;·&nbsp;
+  $7.49 flat rate on orders under $50 &nbsp;·&nbsp;
+  <strong>NEW 2026:</strong> Smoky Black Garlic + Fatali Shocker — dropping soon!
 </div>
 
+<!-- ===== NAV ===== -->
 <nav class="nav">
   <div class="container">
     <div class="nav__inner">
-      <a href="homepage-redesign-mockup.html" class="nav__logo">🔥 BENITO'S</a>
+      <a href="#" class="nav__logo">
+        <svg class="nav__logo-flame" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2C16 2 22 10 22 18C22 22 20 25 16 27C20 20 14 14 10 18C8 20 8 24 10 26C7 24 5 21 5 17C5 10 11 5 16 2Z" fill="#E85D26"/>
+          <path d="M16 27C16 27 12 33 14 37C11 35 9 31 9 27C9 23 12 20 16 20C14 24 16 27 16 27Z" fill="#C44A18"/>
+          <path d="M18 30C20 28 22 25 21 22C23 24 24 27 22 31C21 33 19 35 16 37C17 34 17 31 18 30Z" fill="#F5A623"/>
+        </svg>
+        BENITO'S
+      </a>
+
       <ul class="nav__links">
-        <li><a href="#">Shop All</a></li>
+        <li><a href="#" class="active">Shop All</a></li>
         <li><a href="#">Hot Sauces</a></li>
         <li><a href="#">Maple Syrups</a></li>
         <li><a href="#">Bundles</a></li>
+        <li><a href="#">About</a></li>
         <li><a href="#">Recipes</a></li>
       </ul>
-      <button class="nav__cart-btn">Cart (1)</button>
+
+      <div class="nav__actions">
+        <button class="nav__cart-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          Cart (0)
+        </button>
+      </div>
     </div>
   </div>
 </nav>
 
-<div style="background: var(--clr-bg); padding: 0;">
+<!-- ===== HERO ===== -->
+<section class="hero grain" data-note="HERO: Full-bleed with product bottle + brand story CTA">
+  <div class="hero__bg"></div>
+
+  <div class="hero__content">
+    <div class="hero__text-box">
+      <p class="hero__eyebrow">Vermont Craft · Since 2008</p>
+      <h1 class="hero__title">
+        Handmade in the<br>
+        <em>Green Mountains.</em>
+      </h1>
+      <p class="hero__subtitle">
+        Real chiles. Local farms. Zero fillers. Bottled by Benito himself.
+      </p>
+      <div class="hero__actions">
+        <a href="#" class="btn-primary">
+          🔥 Shop Hot Sauces
+        </a>
+        <a href="#" class="btn-ghost">
+          🍁 Explore Maple Syrups
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero__visual hidden: bottle now baked into composite hero photo -->
+</section>
+
+<!-- ===== TRUST STRIP ===== -->
+<div class="trust-strip">
   <div class="container">
-    <div class="breadcrumb">
-      <a href="homepage-redesign-mockup.html">Home</a>
-      <span>›</span>
-      <a href="#">Hot Sauces</a>
-      <span>›</span>
-      Ol' Bricktucky
+    <div class="trust-strip__inner">
+      <div class="trust-item"><span class="trust-icon">🌿</span> Non-GMO &amp; Organic</div>
+      <div class="trust-item"><span class="trust-icon">🚫</span> Zero Fillers or Preservatives</div>
+      <div class="trust-item"><span class="trust-icon">🧑‍🌾</span> 8 Vermont Farm Partners</div>
+      <div class="trust-item"><span class="trust-icon">📦</span> Free Shipping Over $50</div>
+      <div class="trust-item"><span class="trust-icon">🍁</span> Small Batch, Hand-Bottled</div>
     </div>
   </div>
 </div>
 
-<div class="container">
-  <div class="product-main">
+<!-- ===== BEST SELLERS ===== -->
+<section class="section" data-note="BEST SELLERS: Curated shelf with heat scale badges">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Most Loved</p>
+      <h2 class="section-title">Best Sellers</h2>
+      <p class="section-subtitle">The ones people keep coming back for</p>
+      <div class="section-divider"></div>
+    </div>
 
-    <!-- GALLERY -->
+    <div class="products-grid">
+
+      <!-- Product 1 -->
+      <div class="product-card">
+        <div class="product-card__img-wrap">
+          <div class="product-card__badge">Best Seller</div>
+          <img src="https://cdn.shopify.com/s/files/1/0445/5769/7175/products/Benitos-Ol-Brick-Tucky_1710x1710_7216ec6e-6677-42d3-9e8e-6900e26d265b.png?v=1602876330" alt="Ol' Bricktucky hot sauce" loading="lazy">
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Ol' Bricktucky</div>
+          <div class="heat-scale">
+            <span class="heat-scale__label">Heat</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--off">🔥</span>
+            <span class="flame flame--off">🔥</span>
+            <span class="flame flame--off">🔥</span>
+          </div>
+          <div class="product-card__flavor-tags" style="margin-top:8px;">
+            <span class="flavor-tag">Vinegar-Forward</span>
+            <span class="flavor-tag">Garlic</span>
+            <span class="flavor-tag">Salt</span>
+          </div>
+          <div class="product-card__footer">
+            <div>
+              <div class="product-card__price">$9.99</div>
+              <div class="product-card__size">8 oz.</div>
+            </div>
+            <button class="add-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card">
+        <div class="product-card__img-wrap">
+          <img src="https://cdn.shopify.com/s/files/1/0445/5769/7175/products/Mango_habanero_1710x1710_c60fe8bb-78d7-4c5e-b66d-e0fb4d131de4.png?v=1614202791" alt="Mango Habanero hot sauce" loading="lazy">
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Mango Habanero</div>
+          <div class="heat-scale">
+            <span class="heat-scale__label">Heat</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--off">🔥</span>
+            <span class="flame flame--off">🔥</span>
+          </div>
+          <div class="product-card__flavor-tags" style="margin-top:8px;">
+            <span class="flavor-tag">Fruity</span>
+            <span class="flavor-tag">Tropical</span>
+            <span class="flavor-tag">Medium Heat</span>
+          </div>
+          <div class="product-card__footer">
+            <div>
+              <div class="product-card__price">$8.69</div>
+              <div class="product-card__size">5 oz.</div>
+            </div>
+            <button class="add-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3 — Maple Syrup -->
+      <div class="product-card">
+        <div class="product-card__img-wrap" style="background: #2A1A0A;">
+          <div class="product-card__badge product-card__badge--new">New</div>
+          <div style="font-size:72px; padding: 16px;">🍁</div>
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Habanero Infused Maple Syrup</div>
+          <div class="heat-scale">
+            <span class="heat-scale__label">Heat</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--off">🔥</span>
+            <span class="flame flame--off">🔥</span>
+            <span class="flame flame--off">🔥</span>
+          </div>
+          <div class="product-card__flavor-tags" style="margin-top:8px;">
+            <span class="flavor-tag">Sweet</span>
+            <span class="flavor-tag">Vermont Maple</span>
+            <span class="flavor-tag">Habanero</span>
+          </div>
+          <div class="product-card__footer">
+            <div>
+              <div class="product-card__price">$8.99</div>
+              <div class="product-card__size">5 oz.</div>
+            </div>
+            <button class="add-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4 — Chipotle Grande -->
+      <div class="product-card">
+        <div class="product-card__img-wrap" style="background: #1A0E08;">
+          <div style="font-size:72px; padding: 16px;">🌶️</div>
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Chipotle Grande</div>
+          <div class="heat-scale">
+            <span class="heat-scale__label">Heat</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--off">🔥</span>
+            <span class="flame flame--off">🔥</span>
+            <span class="flame flame--off">🔥</span>
+          </div>
+          <div class="product-card__flavor-tags" style="margin-top:8px;">
+            <span class="flavor-tag">Smoky</span>
+            <span class="flavor-tag">Chipotle</span>
+            <span class="flavor-tag">Rich</span>
+          </div>
+          <div class="product-card__footer">
+            <div>
+              <div class="product-card__price">$8.69</div>
+              <div class="product-card__size">5 oz.</div>
+            </div>
+            <button class="add-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center; margin-top: 32px;">
+      <a href="#" class="btn-primary">View All 30+ Products →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRAND STORY STRIP ===== -->
+<section class="brand-story grain" data-note="BRAND STORY: Dark section, Benito quote + stats">
+  <div class="brand-story__bg"></div>
+  <div class="brand-story__inner container">
     <div>
-      <div class="gallery__main">
-        <div class="gallery__badge">Best Seller</div>
-        <img
-          src="https://cdn.shopify.com/s/files/1/0445/5769/7175/products/Benitos-Ol-Brick-Tucky_1710x1710_7216ec6e-6677-42d3-9e8e-6900e26d265b.png?v=1602876330"
-          alt="Ol' Bricktucky 8oz bottle"
-          loading="eager"
-        >
-      </div>
-      <div class="gallery__thumbs">
-        <div class="gallery__thumb active">🍶</div>
-        <div class="gallery__thumb">🧄</div>
-        <div class="gallery__thumb">🍳</div>
-        <div class="gallery__thumb">🌿</div>
+      <p class="section-eyebrow" style="text-align:left; margin-bottom:16px;">The Story</p>
+      <blockquote class="brand-story__quote">
+        "I'm simply about producing a fresh and unique product that is always made with
+        <strong>high quality and local ingredients.</strong>
+        Benito grows it. Benito cooks it. Benito bottles it."
+      </blockquote>
+      <p class="brand-story__byline">— Ol' Benito · Morrisville, Vermont</p>
+      <div style="margin-top: 24px;">
+        <a href="#" class="btn-ghost">Read Our Story →</a>
       </div>
     </div>
-
-    <!-- PRODUCT INFO -->
-    <div class="product-info">
-
-      <div class="product-info__collection">Benito's Hot Sauce</div>
-      <h1 class="product-info__title">Ol' Bricktucky</h1>
-      <p class="product-info__subtitle">Vermont's classic salt & vinegar hot sauce, made with organic 12-grain vinegar</p>
-
-      <div class="product-rating">
-        <span class="stars">★★★★★</span>
-        <span class="rating-count"><a href="#reviews">47 reviews</a></span>
+    <div class="brand-story__stats">
+      <div class="stat-card">
+        <div class="stat-card__num">2008</div>
+        <div class="stat-card__label">Founded in Vermont</div>
       </div>
-
-      <div class="product-price">
-        <span class="price-main">$9.99</span>
-        <span class="price-size">/ 8 oz.</span>
+      <div class="stat-card">
+        <div class="stat-card__num">30+</div>
+        <div class="stat-card__label">Unique Flavors</div>
       </div>
-
-      <!-- HEAT SCALE — KEY IMPROVEMENT -->
-      <div class="heat-section">
-        <div class="heat-section__header">
-          <span class="heat-section__title">Heat Level</span>
-          <span class="heat-section__level">🔥🔥 Medium-Mild (2/5)</span>
-        </div>
-
-        <div class="heat-bar-wrapper">
-          <div class="heat-bar-track">
-            <div class="heat-bar-mask" style="width: 60%;"></div>
-          </div>
-          <div class="heat-bar-marker" style="left: 40%;"></div>
-        </div>
-
-        <div class="heat-labels">
-          <span>Mild</span>
-          <span>Medium</span>
-          <span>Hot</span>
-          <span>Very Hot</span>
-          <span>Extreme</span>
-        </div>
-
-        <div class="heat-comparisons">
-          <span class="heat-chip heat-chip--context">Hotter than Tabasco</span>
-          <span class="heat-chip heat-chip--context">Milder than jalapeño</span>
-          <span class="heat-chip heat-chip--scoville">~2,000 Scoville</span>
-          <span class="heat-chip heat-chip--context">Great for everyday use</span>
-        </div>
+      <div class="stat-card">
+        <div class="stat-card__num">8</div>
+        <div class="stat-card__label">Vermont Farm Partners</div>
       </div>
-
-      <!-- FLAVOR PROFILE -->
-      <div class="flavor-profile">
-        <div class="flavor-profile__title">Flavor Profile</div>
-        <div class="flavor-bars">
-          <div class="flavor-bar">
-            <span class="flavor-bar__label">Vinegar</span>
-            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:90%; background: #E8A020;"></div></div>
-            <span class="flavor-bar__val">High</span>
-          </div>
-          <div class="flavor-bar">
-            <span class="flavor-bar__label">Garlic</span>
-            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:75%; background: #627647;"></div></div>
-            <span class="flavor-bar__val">Strong</span>
-          </div>
-          <div class="flavor-bar">
-            <span class="flavor-bar__label">Heat</span>
-            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:40%; background: #E85D26;"></div></div>
-            <span class="flavor-bar__val">Mild</span>
-          </div>
-          <div class="flavor-bar">
-            <span class="flavor-bar__label">Salt</span>
-            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:60%; background: #8A7A6A;"></div></div>
-            <span class="flavor-bar__val">Medium</span>
-          </div>
-          <div class="flavor-bar">
-            <span class="flavor-bar__label">Sweetness</span>
-            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:15%; background: #F5A623;"></div></div>
-            <span class="flavor-bar__val">Low</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- PURCHASE -->
-      <div class="purchase-section">
-        <div class="purchase-section__label">Quantity</div>
-        <div class="qty-row">
-          <div class="qty-ctrl">
-            <button class="qty-btn" onclick="changeQty(-1)">−</button>
-            <div class="qty-num" id="qty-num">1</div>
-            <button class="qty-btn" onclick="changeQty(1)">+</button>
-          </div>
-          <button class="btn-add-to-cart" onclick="addToCart()">
-            🛒 Add to Cart
-          </button>
-        </div>
-        <button class="btn-buy-now">Buy It Now</button>
-
-        <div class="shipping-bar">
-          <div class="shipping-bar__text">
-            Add <strong>$40.01 more</strong> to unlock free shipping 🚚
-          </div>
-          <div class="shipping-bar__track">
-            <div class="shipping-bar__fill" id="ship-bar"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TRUST MICRO-COPY -->
-      <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--clr-muted); font-family:var(--font-display); font-weight:700;">
-        <span>🌿 Non-GMO</span>
-        <span>🚫 No Preservatives</span>
-        <span>🧑‍🌾 Vermont Made</span>
-        <span>🔥 Small Batch</span>
-      </div>
-
-      <!-- PRODUCT TABS -->
-      <div class="product-tabs">
-        <div class="tabs-nav">
-          <button class="tab-btn active" onclick="switchTab(this,'desc')">Description</button>
-          <button class="tab-btn" onclick="switchTab(this,'ingredients')">Ingredients</button>
-          <button class="tab-btn" onclick="switchTab(this,'pairs')">What's Good On It</button>
-        </div>
-
-        <div class="tab-content active" id="tab-desc">
-          <p>Our classic Appalachian salt n' vinegar style hot sauce. It's got that "vinegar forward" flavor, made with a 12 grain organic vinegar with the perfect balance of fresh garlic and sea salt from the coast of Maine.</p>
-          <p>Absolutely sensational on eggs, tacos, chicken, steaks, pizza, and almost anything you throw at it. A true all-purpose table sauce that earns its spot next to the salt and pepper.</p>
-          <p>Made with organically sourced chiles from Vermont farms. Zero fillers, zero xanthan gum, zero preservatives. Just real vegetables and real flavor.</p>
-        </div>
-
-        <div class="tab-content" id="tab-ingredients">
-          <p><strong>Ingredients:</strong></p>
-          <ul>
-            <li>Organic cayenne peppers (Vermont-grown)</li>
-            <li>Organic 12-grain vinegar</li>
-            <li>Sea salt (Maine coast)</li>
-            <li>Fresh garlic</li>
-            <li>Onion</li>
-          </ul>
-          <p style="margin-top:16px; font-style:italic; font-size:13px;">No xanthan gum, guar gum, starches, pepper mash, HFC corn syrup, artificial flavors, or preservatives.</p>
-        </div>
-
-        <div class="tab-content" id="tab-pairs">
-          <ul>
-            <li>🍳 Scrambled or fried eggs — the classic move</li>
-            <li>🌮 Tacos al pastor, fish tacos, carnitas</li>
-            <li>🍕 Pizza (especially pepperoni or veggie)</li>
-            <li>🥩 Grilled steak or chicken</li>
-            <li>🥗 Grain bowls and roasted veggie plates</li>
-            <li>🍟 French fries, tater tots, hash browns</li>
-            <li>🌯 Burritos and breakfast sandwiches</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- UPSELL -->
-  <div class="upsell">
-    <div class="upsell__title">🔥 Frequently Bought Together</div>
-    <div class="upsell-items">
-      <div class="upsell-item">
-        <div class="upsell-item__img">🍁</div>
-        <div>
-          <div class="upsell-item__name">Habanero Maple Syrup</div>
-          <div class="upsell-item__price">$8.99 · 5 oz.</div>
-        </div>
-        <div class="upsell-item__add">＋</div>
-      </div>
-      <div class="upsell-item">
-        <div class="upsell-item__img">🌶️</div>
-        <div>
-          <div class="upsell-item__name">Chipotle Grande</div>
-          <div class="upsell-item__price">$8.69 · 5 oz.</div>
-        </div>
-        <div class="upsell-item__add">＋</div>
-      </div>
-      <div class="upsell-item" style="border-color: var(--clr-fire); background: #FFF5F0;">
-        <div class="upsell-item__img">📦</div>
-        <div>
-          <div class="upsell-item__name">Build a 6-Pack Bundle</div>
-          <div class="upsell-item__price" style="color: var(--clr-fire);">Save 10% · Mix &amp; match</div>
-        </div>
-        <div class="upsell-item__add" style="color: var(--clr-fire);">→</div>
+      <div class="stat-card">
+        <div class="stat-card__num">10K+</div>
+        <div class="stat-card__label">lbs Organic Chiles / Year</div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- REVIEWS -->
-  <div class="reviews-section" id="reviews">
-    <div class="reviews-header">
-      <div class="reviews-title">Customer Reviews</div>
-      <div class="reviews-summary">
-        <div>
-          <div class="reviews-big-num">4.9</div>
-          <div class="reviews-stars-big">★★★★★</div>
-          <div style="font-size:13px; color:var(--clr-muted);">47 reviews</div>
-        </div>
-      </div>
+<!-- ===== NEW ARRIVALS ===== -->
+<section class="section new-arrivals" data-note="NEW IN 2026: Pre-launch hype cards for upcoming products">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">New in 2026</p>
+      <h2 class="section-title">Coming Soon</h2>
+      <p class="section-subtitle">Two bold new sauces launching this summer</p>
+      <div class="section-divider"></div>
     </div>
 
-    <div class="review-grid">
-      <div class="review-card">
-        <div class="review-card__header">
-          <div class="review-card__name">Mike T. — Burlington, VT</div>
-          <div class="review-card__date">June 2026</div>
+    <div class="arrivals-grid">
+      <div class="arrival-card">
+        <div class="arrival-card__img">
+          <div class="arrival-card__img-placeholder">🧄</div>
         </div>
-        <div class="review-card__stars">★★★★★</div>
-        <div class="review-card__text">Been buying this since 2019 and go through at least a bottle a month. The vinegar hit is perfect — not too sharp, not too tame. Goes on literally everything in our house. Bought 6 last time to save on shipping.</div>
-        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
+        <div class="arrival-card__content">
+          <div class="arrival-card__new-badge">🔥 Dropping Summer 2026</div>
+          <div class="arrival-card__title">Smoky Black Garlic Hot Sauce</div>
+          <p class="arrival-card__desc">Black garlic meets Pasilla de Oaxaca for a deeply smoky, complex, low-heat sauce unlike anything else in the lineup.</p>
+          <div class="heat-scale" style="margin-bottom:16px;">
+            <span class="heat-scale__label" style="color:rgba(247,235,196,0.6);">Heat</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame" style="opacity:0.25;">🔥</span>
+            <span class="flame" style="opacity:0.25;">🔥</span>
+            <span class="flame" style="opacity:0.25;">🔥</span>
+          </div>
+          <button class="btn-primary" style="font-size:13px; padding:10px 20px;">Notify Me When Available</button>
+        </div>
       </div>
-      <div class="review-card">
-        <div class="review-card__header">
-          <div class="review-card__name">Sarah K. — Portland, ME</div>
-          <div class="review-card__date">May 2026</div>
+
+      <div class="arrival-card">
+        <div class="arrival-card__img" style="background: linear-gradient(135deg, #8B6914, #E8A020);">
+          <div class="arrival-card__img-placeholder">⚡</div>
         </div>
-        <div class="review-card__stars">★★★★★</div>
-        <div class="review-card__text">Discovered this at a farmers market in Stowe and immediately ordered more online. The garlic really comes through and the salt quality is noticeable. Nothing artificial and you can tell. Best everyday hot sauce I've found.</div>
-        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
-      </div>
-      <div class="review-card">
-        <div class="review-card__header">
-          <div class="review-card__name">Dave R. — Boston, MA</div>
-          <div class="review-card__date">April 2026</div>
+        <div class="arrival-card__content">
+          <div class="arrival-card__new-badge">🔥 Dropping Summer 2026</div>
+          <div class="arrival-card__title">The Shocker — Fatali Yellow Sauce</div>
+          <p class="arrival-card__desc">A ton of local Vermont-grown Fatali peppers in a bright, fruity yellow sauce. Don't let the color fool you.</p>
+          <div class="heat-scale" style="margin-bottom:16px;">
+            <span class="heat-scale__label" style="color:rgba(247,235,196,0.6);">Heat</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame flame--on">🔥</span>
+            <span class="flame" style="opacity:0.25;">🔥</span>
+          </div>
+          <button class="btn-primary" style="font-size:13px; padding:10px 20px; background: #E8A020;">Notify Me When Available</button>
         </div>
-        <div class="review-card__stars">★★★★★</div>
-        <div class="review-card__text">Ordered this as a gift basket add-on and had to buy myself a bottle too. Great heat level for people who want flavor, not just burn. Already ordered the Mango Habanero and the Ghost Pepper Maple Syrup.</div>
-        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
-      </div>
-      <div class="review-card">
-        <div class="review-card__header">
-          <div class="review-card__name">Jess M. — Montpelier, VT</div>
-          <div class="review-card__date">March 2026</div>
-        </div>
-        <div class="review-card__stars">★★★★★</div>
-        <div class="review-card__text">The fact that Benito sources from local farms and bottles this himself shows. The freshness is unreal compared to big grocery store sauces. Supporting a Vermont business too — easy choice.</div>
-        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
       </div>
     </div>
   </div>
+</section>
 
-  <div style="height: 64px;"></div>
+<!-- ===== HEAT EXPLORER ===== -->
+<section class="section heat-explorer" data-note="HEAT EXPLORER: Filter by heat preference — key UX improvement">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Find Your Fire</p>
+      <h2 class="section-title">How Hot Do You Like It?</h2>
+      <p class="section-subtitle">Browse by heat level — from breakfast-friendly to bring-a-friend-a-warning</p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="heat-levels">
+      <button class="heat-level-btn active" onclick="selectHeat(this)">
+        <div class="heat-level-btn__flames">🔥</div>
+        <div class="heat-level-btn__name">Mild</div>
+        <div class="heat-level-btn__desc">Table sauce territory.<br>Great for every meal.</div>
+      </button>
+      <button class="heat-level-btn" onclick="selectHeat(this)">
+        <div class="heat-level-btn__flames">🔥🔥</div>
+        <div class="heat-level-btn__name">Medium</div>
+        <div class="heat-level-btn__desc">A satisfying kick.<br>Our most popular range.</div>
+      </button>
+      <button class="heat-level-btn" onclick="selectHeat(this)">
+        <div class="heat-level-btn__flames">🔥🔥🔥</div>
+        <div class="heat-level-btn__name">Hot</div>
+        <div class="heat-level-btn__desc">You know what you want.<br>Habanero territory.</div>
+      </button>
+      <button class="heat-level-btn" onclick="selectHeat(this)">
+        <div class="heat-level-btn__flames">🔥🔥🔥🔥</div>
+        <div class="heat-level-btn__name">Very Hot</div>
+        <div class="heat-level-btn__desc">Ghost &amp; Fatali fans.<br>Wear it as a badge.</div>
+      </button>
+      <button class="heat-level-btn" onclick="selectHeat(this)">
+        <div class="heat-level-btn__flames">🔥🔥🔥🔥🔥</div>
+        <div class="heat-level-btn__name">Extreme</div>
+        <div class="heat-level-btn__desc">Reaper level.<br>You asked for it.</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RECIPES ===== -->
+<section class="section recipes" data-note="RECIPES: New section — drives SEO + product links + brand engagement">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">In the Kitchen</p>
+      <h2 class="section-title">What's Good On It</h2>
+      <p class="section-subtitle">Recipes built around Benito's sauces — from breakfast to backyard BBQ</p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="recipes-grid">
+      <div class="recipe-card">
+        <div class="recipe-card__thumb" style="background: linear-gradient(135deg, #6B3A2A, #C65D1A);">
+          🥚
+          <div class="recipe-card__sauce-tag">Ol' Bricktucky</div>
+        </div>
+        <div class="recipe-card__body">
+          <div class="recipe-card__title">Bricktucky Breakfast Eggs</div>
+          <div class="recipe-card__meta">
+            <span>⏱ 10 min</span>
+            <span>🔥 Mild</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-card__thumb" style="background: linear-gradient(135deg, #8B4513, #E07020);">
+          🍗
+          <div class="recipe-card__sauce-tag">Mango Habanero</div>
+        </div>
+        <div class="recipe-card__body">
+          <div class="recipe-card__title">Tropical Grilled Chicken Wings</div>
+          <div class="recipe-card__meta">
+            <span>⏱ 45 min</span>
+            <span>🔥🔥🔥 Hot</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-card__thumb" style="background: linear-gradient(135deg, #2A4020, #4A7040);">
+          🥞
+          <div class="recipe-card__sauce-tag">Habanero Maple Syrup</div>
+        </div>
+        <div class="recipe-card__body">
+          <div class="recipe-card__title">Spicy Maple Pancakes &amp; Bacon</div>
+          <div class="recipe-card__meta">
+            <span>⏱ 25 min</span>
+            <span>🔥🔥 Medium</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top: 32px;">
+      <a href="#" class="btn-primary">Browse All Recipes →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FARM SOURCING STRIP ===== -->
+<div class="farm-strip" data-note="FARM SOURCING: Key brand differentiator — local VT farms story">
+  <div class="container">
+    <div class="farm-strip__inner">
+      <div class="farm-stat">
+        <div class="farm-stat__num">8</div>
+        <div class="farm-stat__label">Vermont Farms</div>
+      </div>
+      <div class="farm-strip__divider"></div>
+      <div class="farm-stat">
+        <div class="farm-stat__num">10,000+</div>
+        <div class="farm-stat__label">lbs Organic Chiles / Year</div>
+      </div>
+      <div class="farm-strip__divider"></div>
+      <div class="farm-stat">
+        <div class="farm-stat__num">0</div>
+        <div class="farm-stat__label">Artificial Fillers</div>
+      </div>
+      <div class="farm-strip__divider"></div>
+      <div class="farm-stat">
+        <div class="farm-stat__num">100%</div>
+        <div class="farm-stat__label">Hand-Bottled by Benito</div>
+      </div>
+      <div class="farm-strip__divider"></div>
+      <div style="text-align:center;">
+        <a href="#" class="btn-ghost" style="border-color: rgba(255,255,255,0.5); color:white; padding:10px 20px; font-size:13px;">
+          Meet Our Farm Partners →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EMAIL CAPTURE ===== -->
+<section class="email-capture" data-note="EMAIL CAPTURE: First-order discount hook + newsletter">
+  <div class="container">
+    <h2 class="email-capture__title">Get the First Taste 🔥</h2>
+    <p class="email-capture__sub">New sauce launches, exclusive recipes, and a little Vermont fire delivered to your inbox.</p>
+    <div class="email-form">
+      <input type="email" placeholder="your@email.com">
+      <button type="submit">Subscribe</button>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:rgba(247,235,196,0.4);">
+      No spam. Unsubscribe anytime. 10% off your first order.
+    </p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand-name">🔥 BENITO'S HOT SAUCE</div>
+        <div class="footer__brand-tagline">Vermont Craft · Since 2008</div>
+        <p style="font-size:14px; line-height:1.6; max-width:280px;">
+          Small batch hot sauces and infused maple syrups made with organic, non-GMO ingredients from Vermont farms. Handcrafted by Benito in Morrisville, VT.
+        </p>
+      </div>
+      <div>
+        <div class="footer__col-title">Shop</div>
+        <ul class="footer__links">
+          <li><a href="#">All Products</a></li>
+          <li><a href="#">Hot Sauces</a></li>
+          <li><a href="#">Maple Syrups</a></li>
+          <li><a href="#">Pepper Jams</a></li>
+          <li><a href="#">Bundles &amp; Gifts</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Company</div>
+        <ul class="footer__links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Farm Partners</a></li>
+          <li><a href="#">Ingredients</a></li>
+          <li><a href="#">Wholesale</a></li>
+          <li><a href="#">Retail Locations</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Help</div>
+        <ul class="footer__links">
+          <li><a href="#">Contact Benito</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Recipes</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Benito's Hot Sauce · Morrisville, Vermont</span>
+      <span>
+        <a href="#">Privacy</a> &nbsp;·&nbsp;
+        <a href="#">Terms</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== TWEAKS PANEL ===== -->
+<div class="tweaks">
+  <div class="tweaks__title">🎛 Mockup Tweaks</div>
+  <label>
+    <input type="checkbox" id="toggle-notes" onchange="toggleNotes()">
+    Show section annotations
+  </label>
+  <div class="tweaks__note">
+    Design concept for benitoshotsauce.com redesign.<br>
+    Built by Hermes Design Agent · July 2026
+  </div>
 </div>
 
 <script>
-  let qty = 1;
-  function changeQty(delta) {
-    qty = Math.max(1, qty + delta);
-    document.getElementById('qty-num').textContent = qty;
-    // Update shipping bar
-    const subtotal = qty * 9.99;
-    const progress = Math.min(100, (subtotal / 50) * 100);
-    document.getElementById('ship-bar').style.width = progress + '%';
-    const remaining = Math.max(0, 50 - subtotal).toFixed(2);
-    const bar = document.querySelector('.shipping-bar__text');
-    if (remaining <= 0) {
-      bar.innerHTML = '<strong style="color:var(--clr-green)">🚚 Free shipping unlocked!</strong>';
-    } else {
-      bar.innerHTML = `Add <strong>$${remaining} more</strong> to unlock free shipping 🚚`;
-    }
-  }
-
-  function addToCart() {
-    const btn = document.querySelector('.btn-add-to-cart');
-    btn.textContent = '✓ Added!';
-    btn.style.background = 'var(--clr-green)';
-    setTimeout(() => {
-      btn.innerHTML = '🛒 Add to Cart';
-      btn.style.background = '';
-    }, 1500);
-  }
-
-  function switchTab(btn, tabId) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  function selectHeat(btn) {
+    document.querySelectorAll('.heat-level-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    document.getElementById('tab-' + tabId).classList.add('active');
   }
+  function toggleNotes() {
+    document.body.classList.toggle('show-notes');
+  }
+  // Add mockup notes to data-note elements
+  document.querySelectorAll('[data-note]').forEach(el => {
+    const note = document.createElement('span');
+    note.className = 'mockup-note';
+    note.textContent = el.dataset.note;
+    el.style.position = 'relative';
+    el.appendChild(note);
+  });
 </script>
 
 </body>
