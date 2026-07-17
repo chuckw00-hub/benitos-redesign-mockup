@@ -3,30 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Benito's Hot Sauce — Homepage Redesign Concept</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Libre+Franklin:wght@400;500&display=swap" rel="stylesheet">
+  <title>Benito's Hot Sauce — Homepage v2 (Brand-Accurate)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Nunito:wght@400;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Libre+Franklin:wght@400;500&display=swap" rel="stylesheet">
   <style>
     /* ===== DESIGN TOKENS ===== */
     :root {
-      --clr-fire: #FF4500;        /* OrangeRed — primary action, CTAs */
-      --clr-fire-dark: #CC2200;   /* Deep red for hover states */
-      --clr-fire-bright: #FF6A00; /* Bright orange accent */
-      --clr-pepper: #B80000;      /* Deep chili red — headers, accents */
-      --clr-green: #1A6B00;       /* Vermont forest green */
-      --clr-green-bright: #2E9E00;/* Bright green accent */
-      --clr-gold: #D4A000;        /* Spicy gold/mustard */
-      --clr-charcoal: #2A2A2A;    /* Original charcoal for dark sections */
-      --clr-charcoal-soft: #444444;
-      --clr-surface: #FFFFFF;     /* Card/surface background — original white */
-      --clr-surface-2: #F5F0E8;   /* Warm off-white for card image wells */
-      --clr-cream: #FFE066;       /* Punchy yellow — replaces pale cream text */
-      --clr-text: #1A1A1A;        /* Primary text on light */
-      --clr-text-muted: #CC3A00;  /* Hot orange for muted text instead of gray */
-      --clr-rule: #FF4500;        /* Fire dividers */
-      --clr-bg: #FDFAF3;          /* Original warm off-white page background */
+      /* ===== BENITO'S REAL BRAND COLORS (extracted from label photography) ===== */
+      --clr-fire: #B8362C;        /* BRAND BRICK RED — label header band, primary action */
+      --clr-fire-dark: #8E2318;   /* Dark brick — hover states, deep shadows */
+      --clr-fire-bright: #C84035; /* Lighter brick — gradient highlight */
+      --clr-pepper: #8E2318;      /* Deep chili — same family as brick red */
+      --clr-green: #3E6B2E;       /* Vermont forest green (from Made in VT badge) */
+      --clr-green-bright: #2C7A45;/* Stamp green — badge accent */
+      --clr-gold: #E8832A;        /* North Country orange — secondary accent only */
+      --clr-charcoal: #1C1410;    /* True label dark — replaces neutral charcoal */
+      --clr-charcoal-soft: #2A1E1A;
+      --clr-surface: #F5EDD8;     /* Label cream highlight — warm paper surface */
+      --clr-surface-2: #EFE0C8;   /* Label body linen — richer cream for bg wells */
+      --clr-cream: #F7EBC4;       /* Text on dark — warm cream, not yellow */
+      --clr-text: #1C1410;        /* Label text dark */
+      --clr-text-muted: #5C3A30;  /* Warm brown muted text */
+      --clr-rule: #B8362C;        /* Brick red dividers */
+      --clr-bg: #EFE0C8;          /* Real label linen — page background */
+      --clr-nc-orange: #E8832A;   /* North Country line accent */
+      --clr-nc-pink: #D4285C;     /* Burning maple / North Country accent */
 
       --font-display: 'Nunito', sans-serif;
-      --font-editorial: 'Lora', serif;
+      --font-headline: 'Rye', serif;    /* BENITO'S wordmark only */
       --font-body: 'Libre Franklin', system-ui, sans-serif;
 
       --radius: 4px;
@@ -67,6 +70,19 @@
       z-index: 1;
     }
     .grain > * { position: relative; z-index: 2; }
+
+    /* ===== DOT TEXTURE (echoes Benito's label dot pattern) ===== */
+    /* Benito's labels have a distinctive white dot grid on cream — echoed here */
+    .dot-texture::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(28,20,16,0.10) 1.5px, transparent 1.5px);
+      background-size: 22px 22px;
+      z-index: 0;
+    }
+    .dot-texture > * { position: relative; z-index: 1; }
 
     /* ===== LAYOUT ===== */
     .container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--space-md); }
@@ -114,10 +130,10 @@
       gap: var(--space-md);
     }
     .nav__logo {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: 22px;
-      letter-spacing: 1px;
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: 2px;
       color: var(--clr-cream);
       display: flex;
       align-items: center;
@@ -163,7 +179,7 @@
     /* ===== HERO ===== */
     .hero {
       position: relative;
-      min-height: 700px;
+      min-height: 520px;
       background: var(--clr-charcoal);
       display: flex;
       align-items: center;
@@ -172,9 +188,9 @@
     .hero__bg {
       position: absolute;
       inset: 0;
-      background-image: url('https://v3b.fal.media/files/b/0aa29275/1HMrTaeSRKWavti6b2dBs_T7AHnZgl.png');
+      background-image: url('https://v3b.fal.media/files/b/0aa292f1/1tlEGBuzPEZsOcb3x52VB_2iTWes5Q.png');
       background-size: cover;
-      background-position: center center;
+      background-position: 30% center;
     }
     /* Gradient on left so text box area is darker and more legible */
     .hero__bg::before {
@@ -226,12 +242,14 @@
       flex-shrink: 0;
     }
     .hero__title {
-      font-family: var(--font-display);
+      font-family: var(--font-headline);
       font-size: clamp(36px, 4.5vw, 62px);
-      font-weight: 900;
+      font-weight: 400;
       line-height: 1.1;
       color: var(--clr-cream);
       margin-bottom: var(--space-sm);
+      letter-spacing: 1px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.5);
     }
     .hero__title em {
       font-style: normal;
@@ -391,12 +409,16 @@
       margin-bottom: 8px;
     }
     .section-title {
-      font-family: var(--font-display);
+      font-family: var(--font-headline);
       font-size: clamp(26px, 3vw, 38px);
-      font-weight: 900;
+      font-weight: 400;
       color: #fff;
       line-height: 1.2;
+      letter-spacing: 0.5px;
     }
+    /* Light background sections (on linen/cream) need dark titles */
+    .section--light .section-title { color: var(--clr-charcoal); }
+    .section--light .section-eyebrow { color: var(--clr-fire); }
     .section-subtitle {
       font-family: var(--font-editorial);
       font-style: italic;
@@ -440,18 +462,18 @@
       background: var(--clr-surface);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      border: 1px solid rgba(255,69,0,0.2);
+      border: 1px solid rgba(184,54,44,0.18);
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
     }
     .product-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(255,69,0,0.2);
+      box-shadow: 0 8px 32px rgba(184,54,44,0.2);
       border-color: var(--clr-fire);
     }
     .product-card__img-wrap {
       position: relative;
-      background: #F5F0E8;
+      background: var(--clr-surface-2);
       aspect-ratio: 1;
       display: flex;
       align-items: center;
@@ -502,9 +524,9 @@
       letter-spacing: 0.3px;
       padding: 3px 7px;
       border-radius: 2px;
-      background: rgba(255,69,0,0.15);
+      background: rgba(184,54,44,0.10);
       color: var(--clr-text-muted);
-      border: 1px solid rgba(255,69,0,0.3);
+      border: 1px solid rgba(184,54,44,0.25);
     }
     .product-card__footer {
       display: flex;
@@ -512,7 +534,7 @@
       justify-content: space-between;
       margin-top: 12px;
       padding-top: 12px;
-      border-top: 1px solid rgba(255,69,0,0.2);
+      border-top: 1px solid rgba(184,54,44,0.18);
     }
     .product-card__price {
       font-family: var(--font-display);
@@ -613,7 +635,7 @@
     }
 
     /* ===== NEW ARRIVALS ===== */
-    .new-arrivals { background: var(--clr-cream); }
+    .new-arrivals { background: var(--clr-surface); }
     .arrivals-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -698,7 +720,7 @@
     }
     .heat-level-btn:hover, .heat-level-btn.active {
       border-color: var(--clr-fire);
-      background: #FFF0EB;
+      background: var(--clr-surface);
       transform: translateY(-2px);
     }
     .heat-level-btn__flames { font-size: 20px; letter-spacing: 2px; }
@@ -716,7 +738,7 @@
     .heat-level-btn.active .heat-level-btn__name { color: var(--clr-fire); }
 
     /* ===== RECIPES ===== */
-    .recipes { background: var(--clr-cream); }
+    .recipes { background: var(--clr-bg); }
     .recipes-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -726,11 +748,11 @@
       background: var(--clr-surface);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      border: 1px solid rgba(255,69,0,0.2);
+      border: 1px solid rgba(184,54,44,0.18);
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
     }
-    .recipe-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255,69,0,0.25); border-color: var(--clr-fire); }
+    .recipe-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(184,54,44,0.22); border-color: var(--clr-fire); }
     .recipe-card__thumb {
       height: 180px;
       background: linear-gradient(135deg, #8B2000, #CC3A00);
@@ -1017,9 +1039,9 @@
     <div class="nav__inner">
       <a href="#" class="nav__logo">
         <svg class="nav__logo-flame" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16 2C16 2 22 10 22 18C22 22 20 25 16 27C20 20 14 14 10 18C8 20 8 24 10 26C7 24 5 21 5 17C5 10 11 5 16 2Z" fill="#E85D26"/>
-          <path d="M16 27C16 27 12 33 14 37C11 35 9 31 9 27C9 23 12 20 16 20C14 24 16 27 16 27Z" fill="#C44A18"/>
-          <path d="M18 30C20 28 22 25 21 22C23 24 24 27 22 31C21 33 19 35 16 37C17 34 17 31 18 30Z" fill="#F5A623"/>
+          <path d="M16 2C16 2 22 10 22 18C22 22 20 25 16 27C20 20 14 14 10 18C8 20 8 24 10 26C7 24 5 21 5 17C5 10 11 5 16 2Z" fill="#B8362C"/>
+          <path d="M16 27C16 27 12 33 14 37C11 35 9 31 9 27C9 23 12 20 16 20C14 24 16 27 16 27Z" fill="#8E2318"/>
+          <path d="M18 30C20 28 22 25 21 22C23 24 24 27 22 31C21 33 19 35 16 37C17 34 17 31 18 30Z" fill="#E8832A"/>
         </svg>
         BENITO'S
       </a>
@@ -1048,8 +1070,19 @@
 </nav>
 
 <!-- ===== HERO ===== -->
-<section class="hero grain" data-note="HERO: Full-bleed with product bottle + brand story CTA">
+<section class="hero grain dot-texture" data-note="HERO: Full-bleed with brand-accurate brick red palette + low-poly polygon accent">
   <div class="hero__bg"></div>
+
+  <!-- Low-poly geometric polygon accent (echoes Poto Rojo label illustration DNA) -->
+  <svg viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.07;pointer-events:none;z-index:1;" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="1200,0 1440,0 1440,200 1300,80" fill="#B8362C"/>
+    <polygon points="1300,80 1440,200 1440,420 1350,310" fill="#8E2318"/>
+    <polygon points="1200,0 1300,80 1150,120 1080,0" fill="#C84035"/>
+    <polygon points="1350,310 1440,420 1440,620 1280,520" fill="#B8362C"/>
+    <polygon points="1150,120 1300,80 1260,240 1110,210" fill="#8E2318"/>
+    <polygon points="1260,240 1350,310 1190,400 1080,300" fill="#B8362C"/>
+    <polygon points="1080,300 1190,400 1090,520 960,420" fill="#C84035"/>
+  </svg>
 
   <div class="hero__content">
     <div class="hero__text-box">
@@ -1068,6 +1101,17 @@
         <a href="#" class="btn-ghost">
           🍁 Explore Maple Syrups
         </a>
+      </div>
+      <!-- Vermont provenance badge — echoes label's circular Made in Vermont stamp -->
+      <div style="margin-top:20px; display:inline-flex; align-items:center; gap:12px;">
+        <svg width="58" height="58" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="29" fill="none" stroke="#3E6B2E" stroke-width="2"/>
+          <circle cx="32" cy="32" r="24" fill="none" stroke="#3E6B2E" stroke-width="0.8"/>
+          <text x="32" y="22" text-anchor="middle" font-family="sans-serif" font-size="6.5" font-weight="700" fill="#3E6B2E" letter-spacing="2.5">MADE IN</text>
+          <text x="32" y="35" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#3E6B2E" letter-spacing="1">VERMONT</text>
+          <text x="32" y="46" text-anchor="middle" font-family="sans-serif" font-size="5.5" font-weight="700" fill="#3E6B2E" letter-spacing="2">✦ ✦ ✦</text>
+        </svg>
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(247,235,196,0.55); line-height:1.5;">Small Batch<br>Morrisville, VT</div>
       </div>
     </div>
   </div>
@@ -1089,7 +1133,7 @@
 </div>
 
 <!-- ===== BEST SELLERS ===== -->
-<section class="section" data-note="BEST SELLERS: Curated shelf with heat scale badges">
+<section class="section section--light" data-note="BEST SELLERS: Curated shelf with heat scale badges">
   <div class="container">
     <div class="section-header">
       <p class="section-eyebrow">Most Loved</p>
@@ -1322,7 +1366,7 @@
 </section>
 
 <!-- ===== HEAT EXPLORER ===== -->
-<section class="section heat-explorer" data-note="HEAT EXPLORER: Filter by heat preference — key UX improvement">
+<section class="section section--light heat-explorer" data-note="HEAT EXPLORER: Filter by heat preference — key UX improvement">
   <div class="container">
     <div class="section-header">
       <p class="section-eyebrow">Find Your Fire</p>
@@ -1528,7 +1572,8 @@
     Show section annotations
   </label>
   <div class="tweaks__note">
-    Design concept for benitoshotsauce.com redesign.<br>
+    Design concept v2 for benitoshotsauce.com redesign.<br>
+    Brand-accurate: brick red #B8362C, Rye + Fredoka One fonts, label linen palette.<br>
     Built by Hermes Design Agent · July 2026
   </div>
 </div>
