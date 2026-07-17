@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benito's Hot Sauce — Website Rebuild Plan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Nunito:wght@400;700;800;900&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fire: #B8362C; --fire-dark: #8E2318; --charcoal: #1C1410;
+      --linen: #EFE0C8; --cream: #F7EBC4; --surface: #F5EDD8;
+      --text: #1C1410; --muted: #5C3A30; --green: #3E6B2E;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Libre Franklin', system-ui, sans-serif; background: var(--linen); color: var(--text); line-height: 1.65; }
+    .wrap { max-width: 780px; margin: 0 auto; padding: 0 20px 80px; }
+    header.hero { background: var(--charcoal); color: var(--cream); text-align: center; padding: 56px 20px 48px; }
+    header.hero h1 { font-family: 'Rye', serif; font-weight: 400; font-size: clamp(26px, 5vw, 40px); letter-spacing: 1px; }
+    header.hero .sub { font-family: 'Nunito', sans-serif; font-weight: 700; color: var(--fire); letter-spacing: 2px; text-transform: uppercase; font-size: 12px; margin-bottom: 14px; }
+    header.hero p.lead { max-width: 560px; margin: 14px auto 0; color: rgba(247,235,196,0.85); font-size: 16px; }
+    h2 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 21px; margin: 44px 0 6px; color: var(--charcoal); }
+    h2 .num { color: var(--fire); margin-right: 8px; }
+    .rule { width: 56px; height: 3px; background: var(--fire); border-radius: 2px; margin: 0 0 16px; }
+    p { margin-bottom: 12px; }
+    ul { margin: 0 0 12px 22px; }
+    li { margin-bottom: 7px; }
+    .card { background: var(--surface); border-left: 4px solid var(--fire); border-radius: 6px; padding: 18px 22px; margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card.green { border-left-color: var(--green); }
+    .card strong.title { font-family: 'Nunito', sans-serif; font-weight: 800; display: block; margin-bottom: 6px; }
+    a.btn { display: inline-block; background: var(--fire); color: #fff; text-decoration: none; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; padding: 10px 20px; border-radius: 5px; margin: 6px 10px 6px 0; }
+    a.btn:hover { background: var(--fire-dark); }
+    a { color: var(--fire-dark); }
+    .muted { color: var(--muted); font-size: 14px; }
+    .steps { counter-reset: step; list-style: none; margin-left: 0; }
+    .steps li { counter-increment: step; padding-left: 40px; position: relative; margin-bottom: 12px; }
+    .steps li::before { content: counter(step); position: absolute; left: 0; top: 1px; width: 26px; height: 26px; border-radius: 50%; background: var(--fire); color: #fff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 15px; }
+    td { padding: 8px 10px; border-bottom: 1px solid rgba(28,20,16,0.12); vertical-align: top; }
+    td:first-child { font-family: 'Nunito', sans-serif; font-weight: 800; white-space: nowrap; width: 34%; }
+    footer { text-align: center; margin-top: 56px; font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="hero">
+  <div class="sub">Benito's Hot Sauce · Morrisville, VT</div>
+  <h1>Website Rebuild Plan</h1>
+  <p class="lead">A brand-new look for benitoshotsauce.com — built on the store you already have. Same products, same checkout, same orders. Just a site that finally looks as good as the sauce.</p>
+</header>
+<div class="wrap">
+
+  <h2><span class="num">1.</span> The short version</h2>
+  <div class="rule"></div>
+  <p>Your store already runs on Shopify and it works — all 53 products, checkout, payments, shipping. None of that gets touched. We build the new design as a <strong>new theme on your existing store</strong>: you preview it privately, request changes, and when you're happy, going live is one click. The old look stays saved, so it's reversible at any time.</p>
+  <p>The design is already drafted — take a look:</p>
+  <p>
+    <a class="btn" href="https://chuckw00-hub.github.io/benitos-redesign-mockup/">Homepage concept</a>
+    <a class="btn" href="https://chuckw00-hub.github.io/benitos-redesign-mockup/product.html">Product page concept</a>
+  </p>
+  <p class="muted">These are design mockups (sample text and layout) — the real build pulls your actual products, prices, and photos straight from your store.</p>
+
+  <h2><span class="num">2.</span> What gets built</h2>
+  <div class="rule"></div>
+  <table>
+    <tr><td>Homepage</td><td>From the concept: big Vermont hero, best sellers, your story, new arrivals, "How Hot Do You Like It?" heat browser, recipes, farm partners, email signup.</td></tr>
+    <tr><td>Product pages</td><td>One great template for all 53 products: large photos, heat scale, flavor tags, add-to-cart, related products. Works for sauces, syrups, and packs.</td></tr>
+    <tr><td>Collections</td><td>Hot Sauces · Maple Syrups · Bundles &amp; Gifts — browsable and filterable (by heat, by type).</td></tr>
+    <tr><td>Cart &amp; checkout</td><td>Cart styled to match; checkout stays Shopify's secure checkout your customers already use.</td></tr>
+    <tr><td>The rest</td><td>About, Contact, Shipping &amp; Returns, and a Recipes hub — restyled to match the new brand look.</td></tr>
+    <tr><td>Phone-first</td><td>Every page is checked on phone and desktop before you ever see it.</td></tr>
+  </table>
+
+  <h2><span class="num">3.</span> What does NOT change</h2>
+  <div class="rule"></div>
+  <div class="card green">
+    <ul style="margin-bottom:0">
+      <li>Your products, prices, variants, and inventory — untouched, nothing re-entered</li>
+      <li>Checkout, payments, taxes, and shipping — exactly as today</li>
+      <li>Your domain (benitoshotsauce.com), customer accounts, and discount codes</li>
+      <li>Existing page addresses — links and search rankings carry over</li>
+      <li>Orders keep flowing the whole time — there is no downtime</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">4.</span> How it rolls out</h2>
+  <div class="rule"></div>
+  <ol class="steps">
+    <li><strong>Access.</strong> You send a collaborator invite from your Shopify admin (Settings → Users → Collaborators). No passwords change hands, and you can revoke it anytime.</li>
+    <li><strong>Build.</strong> We convert the approved design into your store's new theme — it sits unpublished on your store while your current site keeps running.</li>
+    <li><strong>Preview.</strong> You get a private preview link of YOUR store in the new design — real products, real prices. Click around on your phone, send us everything you want changed.</li>
+    <li><strong>Revise.</strong> We turn your feedback around in short rounds until it's right.</li>
+    <li><strong>Launch.</strong> One click publishes it. The old theme stays saved as an instant fallback.</li>
+  </ol>
+
+  <h2><span class="num">5.</span> What we need from you</h2>
+  <div class="rule"></div>
+  <ul>
+    <li>The collaborator invite (step 1 above)</li>
+    <li>About 30 minutes: which products to feature, any copy you want changed, and any photos you love or hate</li>
+    <li>Your honest reaction to the two concept pages — before we build, not after</li>
+  </ul>
+
+  <h2><span class="num">6.</span> Timeline</h2>
+  <div class="rule"></div>
+  <p>About <strong>1–2 weeks</strong> from access to launch-ready, including your feedback rounds. Most of that is polish — the design direction is already done.</p>
+
+  <footer>Prepared for Benito's Hot Sauce · July 2026</footer>
+</div>
+</body>
+</html>
