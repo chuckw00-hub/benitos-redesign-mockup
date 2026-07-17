@@ -68,15 +68,23 @@
       position: absolute;
       top: 16px;
       left: 16px;
-      background: var(--clr-charcoal);
-      color: var(--clr-cream);
+      background: linear-gradient(135deg, #ff2200 0%, #ff6600 45%, #ffaa00 100%);
+      color: #fff;
       font-family: var(--font-display);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      padding: 5px 10px;
-      border-radius: 2px;
+      padding: 6px 12px;
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(255,80,0,0.7), 0 0 22px rgba(255,40,0,0.45);
+      text-shadow: 0 1px 4px rgba(180,0,0,0.5);
+      animation: flamePulse 1.8s ease-in-out infinite;
+    }
+    @keyframes flamePulse {
+      0%   { box-shadow: 0 0 8px rgba(255,80,0,0.7), 0 0 18px rgba(255,40,0,0.4); }
+      50%  { box-shadow: 0 0 16px rgba(255,120,0,0.95), 0 0 32px rgba(255,60,0,0.6); }
+      100% { box-shadow: 0 0 8px rgba(255,80,0,0.7), 0 0 18px rgba(255,40,0,0.4); }
     }
     .gallery__thumbs { display: flex; gap: 12px; margin-top: 16px; }
     .gallery__thumb {
@@ -497,7 +505,7 @@
     <!-- GALLERY -->
     <div>
       <div class="gallery__main">
-        <div class="gallery__badge">Best Seller</div>
+        <div class="gallery__badge">🔥 Best Seller</div>
         <img
           src="product-photo.png"
           alt="Ol' Bricktucky 8oz bottle"
