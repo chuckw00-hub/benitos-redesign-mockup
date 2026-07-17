@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benito's Hot Sauce — Product Page Redesign Concept</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;1,400&family=Libre+Franklin:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --clr-fire: #E85D26;
+      --clr-fire-dark: #C44A18;
+      --clr-green: #627647;
+      --clr-cream: #F7EBC4;
+      --clr-rule: #D4C89A;
+      --clr-charcoal: #2A2A2A;
+      --clr-charcoal-soft: #444;
+      --clr-muted: #6B5D4F;
+      --clr-bg: #FDFAF3;
+      --clr-surface: #FFFFFF;
+      --font-display: 'Nunito', sans-serif;
+      --font-editorial: 'Lora', serif;
+      --font-body: 'Libre Franklin', system-ui, sans-serif;
+      --radius: 4px;
+      --radius-lg: 8px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 6px 24px rgba(0,0,0,0.12);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body { font-family: var(--font-body); background: var(--clr-bg); color: var(--clr-charcoal); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+    /* Nav (same as homepage) */
+    .announce-bar { background: var(--clr-charcoal); color: var(--clr-cream); text-align: center; padding: 10px 32px; font-size: 13px; letter-spacing: 0.5px; font-family: var(--font-display); font-weight: 700; }
+    .announce-bar strong { color: var(--clr-fire); }
+    .nav { background: rgba(42,42,42,0.96); color: var(--clr-cream); border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 100; }
+    .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav__logo { font-family: var(--font-display); font-weight: 900; font-size: 20px; letter-spacing: 1px; color: var(--clr-cream); }
+    .nav__links { display: flex; gap: 24px; list-style: none; font-size: 13px; letter-spacing: 0.8px; text-transform: uppercase; font-weight: 700; }
+    .nav__links a { color: rgba(247,235,196,0.7); }
+    .nav__links a:hover { color: var(--clr-cream); }
+    .nav__cart-btn { background: var(--clr-fire); color: white; border: none; padding: 8px 18px; border-radius: 4px; font-family: var(--font-display); font-weight: 700; font-size: 13px; cursor: pointer; }
+
+    /* Breadcrumb */
+    .breadcrumb { padding: 16px 0; font-size: 12px; color: var(--clr-muted); }
+    .breadcrumb a { color: var(--clr-muted); }
+    .breadcrumb a:hover { color: var(--clr-charcoal); }
+    .breadcrumb span { margin: 0 6px; }
+
+    /* Product Layout */
+    .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; padding: 32px 0 64px; align-items: start; }
+
+    /* Gallery */
+    .gallery__main {
+      background: #F0E8D4;
+      border-radius: 12px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .gallery__main img { width: 65%; height: 65%; object-fit: contain; }
+    .gallery__badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--clr-charcoal);
+      color: var(--clr-cream);
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 2px;
+    }
+    .gallery__thumbs { display: flex; gap: 12px; margin-top: 16px; }
+    .gallery__thumb {
+      width: 72px;
+      height: 72px;
+      background: #F0E8D4;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      transition: border-color 0.2s;
+    }
+    .gallery__thumb.active { border-color: var(--clr-fire); }
+    .gallery__thumb:hover { border-color: var(--clr-charcoal-soft); }
+
+    /* Product Info */
+    .product-info {}
+    .product-info__collection {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--clr-green);
+      margin-bottom: 8px;
+    }
+    .product-info__title {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--clr-charcoal);
+      margin-bottom: 12px;
+    }
+    .product-info__subtitle {
+      font-family: var(--font-editorial);
+      font-style: italic;
+      color: var(--clr-muted);
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* Rating */
+    .product-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+    .stars { color: #F5A623; font-size: 16px; letter-spacing: 2px; }
+    .rating-count { font-size: 13px; color: var(--clr-muted); }
+    .rating-count a { color: var(--clr-fire); text-decoration: underline; }
+
+    /* Price */
+    .product-price {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--clr-rule);
+    }
+    .price-main { font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--clr-charcoal); }
+    .price-size { font-size: 16px; color: var(--clr-muted); }
+    .free-ship-nudge {
+      background: #E8F5E0;
+      border: 1px solid #B8D8A0;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: #3A6020;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Heat Scale — THE KEY UX */
+    .heat-section {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-rule);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .heat-section__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .heat-section__title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--clr-charcoal-soft);
+    }
+    .heat-section__level {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--clr-fire);
+    }
+    .heat-bar-wrapper {
+      position: relative;
+      margin-bottom: 12px;
+    }
+    .heat-bar-track {
+      height: 12px;
+      border-radius: 6px;
+      background: linear-gradient(to right, #F5A623, #E85D26, #C44A18, #8B1010, #4A0505);
+      position: relative;
+    }
+    .heat-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+    .heat-bar-mask {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      background: rgba(240,232,212,0.85);
+      border-radius: 0 6px 6px 0;
+      transition: width 0.5s ease;
+    }
+    .heat-bar-marker {
+      position: absolute;
+      top: -4px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border: 3px solid var(--clr-fire);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      transition: left 0.5s ease;
+      box-shadow: 0 2px 6px rgba(232,93,38,0.4);
+    }
+    .heat-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--clr-muted);
+      margin-top: 6px;
+    }
+    .heat-comparisons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .heat-chip {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid;
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .heat-chip--context { background: rgba(232,93,38,0.08); border-color: rgba(232,93,38,0.3); color: var(--clr-fire-dark); }
+    .heat-chip--scoville { background: rgba(98,118,71,0.08); border-color: rgba(98,118,71,0.3); color: var(--clr-green); }
+
+    /* Flavor Profile */
+    .flavor-profile {
+      margin-bottom: 24px;
+    }
+    .flavor-profile__title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--clr-charcoal-soft);
+      margin-bottom: 12px;
+    }
+    .flavor-bars { display: flex; flex-direction: column; gap: 8px; }
+    .flavor-bar { display: grid; grid-template-columns: 100px 1fr 40px; align-items: center; gap: 12px; }
+    .flavor-bar__label { font-size: 13px; color: var(--clr-muted); font-weight: 500; }
+    .flavor-bar__track { height: 6px; background: rgba(212,200,154,0.5); border-radius: 3px; position: relative; overflow: hidden; }
+    .flavor-bar__fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 3px; }
+    .flavor-bar__val { font-size: 12px; font-weight: 700; color: var(--clr-charcoal-soft); text-align: right; }
+
+    /* Quantity + Add to Cart */
+    .purchase-section { margin-bottom: 24px; }
+    .purchase-section__label {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      color: var(--clr-charcoal-soft);
+    }
+    .qty-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--clr-rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .qty-btn {
+      width: 40px;
+      height: 48px;
+      border: none;
+      background: var(--clr-bg);
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--clr-charcoal);
+      transition: background 0.15s;
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+    .qty-btn:hover { background: var(--clr-cream); }
+    .qty-num {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      border-left: 1.5px solid var(--clr-rule);
+      border-right: 1.5px solid var(--clr-rule);
+    }
+    .btn-add-to-cart {
+      flex: 1;
+      height: 52px;
+      background: var(--clr-charcoal);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-add-to-cart:hover { background: var(--clr-fire); transform: translateY(-1px); }
+    .btn-buy-now {
+      width: 100%;
+      height: 52px;
+      background: var(--clr-fire);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+    .btn-buy-now:hover { background: var(--clr-fire-dark); }
+
+    /* Free shipping threshold bar */
+    .shipping-bar {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-rule);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    .shipping-bar__text { margin-bottom: 8px; font-family: var(--font-display); font-weight: 600; color: var(--clr-charcoal-soft); }
+    .shipping-bar__text strong { color: var(--clr-green); }
+    .shipping-bar__track { height: 6px; background: var(--clr-rule); border-radius: 3px; overflow: hidden; }
+    .shipping-bar__fill { height: 100%; width: 18%; background: var(--clr-green); border-radius: 3px; transition: width 0.5s; }
+
+    /* Product details tabs */
+    .product-tabs { border-top: 1px solid var(--clr-rule); margin-top: 32px; }
+    .tabs-nav { display: flex; gap: 0; border-bottom: 1px solid var(--clr-rule); margin-bottom: 24px; }
+    .tab-btn {
+      padding: 14px 20px;
+      border: none;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      color: var(--clr-muted);
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+    }
+    .tab-btn.active { color: var(--clr-charcoal); border-bottom-color: var(--clr-fire); }
+    .tab-btn:hover { color: var(--clr-charcoal); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .tab-content p { font-size: 15px; line-height: 1.7; color: var(--clr-charcoal-soft); margin-bottom: 16px; }
+    .tab-content ul { list-style: none; padding: 0; }
+    .tab-content ul li { padding: 8px 0; border-bottom: 1px solid var(--clr-rule); font-size: 14px; color: var(--clr-charcoal-soft); }
+    .tab-content ul li:last-child { border-bottom: none; }
+
+    /* Upsell / Frequently bought together */
+    .upsell {
+      background: var(--clr-cream);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-top: 48px;
+    }
+    .upsell__title { font-family: var(--font-display); font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+    .upsell-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .upsell-item {
+      background: var(--clr-surface);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(212,200,154,0.5);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .upsell-item:hover { border-color: var(--clr-fire); }
+    .upsell-item__img { width: 48px; height: 48px; background: #F0E8D4; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .upsell-item__name { font-family: var(--font-display); font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .upsell-item__price { font-size: 12px; color: var(--clr-muted); }
+    .upsell-item__add { margin-left: auto; font-size: 18px; color: var(--clr-fire); flex-shrink: 0; }
+
+    /* Reviews */
+    .reviews-section { margin-top: 64px; }
+    .reviews-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .reviews-title { font-family: var(--font-display); font-size: 24px; font-weight: 900; }
+    .reviews-summary { display: flex; align-items: center; gap: 24px; }
+    .reviews-big-num { font-family: var(--font-display); font-size: 48px; font-weight: 900; line-height: 1; }
+    .reviews-stars-big { font-size: 24px; color: #F5A623; }
+    .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .review-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-rule);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .review-card__header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .review-card__name { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+    .review-card__date { font-size: 12px; color: var(--clr-muted); }
+    .review-card__stars { color: #F5A623; font-size: 14px; margin-bottom: 8px; }
+    .review-card__text { font-size: 14px; color: var(--clr-charcoal-soft); line-height: 1.6; }
+    .review-card__product-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      background: var(--clr-cream);
+      padding: 3px 8px;
+      border-radius: 2px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--clr-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .product-main { grid-template-columns: 1fr; gap: 32px; }
+      .upsell-items { grid-template-columns: 1fr; }
+      .review-grid { grid-template-columns: 1fr; }
+      .nav__links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="announce-bar">
+  🔥 <strong>FREE SHIPPING</strong> on all orders over $50 · $7.49 flat rate under $50
+</div>
+
+<nav class="nav">
+  <div class="container">
+    <div class="nav__inner">
+      <a href="homepage-redesign-mockup.html" class="nav__logo">🔥 BENITO'S</a>
+      <ul class="nav__links">
+        <li><a href="#">Shop All</a></li>
+        <li><a href="#">Hot Sauces</a></li>
+        <li><a href="#">Maple Syrups</a></li>
+        <li><a href="#">Bundles</a></li>
+        <li><a href="#">Recipes</a></li>
+      </ul>
+      <button class="nav__cart-btn">Cart (1)</button>
+    </div>
+  </div>
+</nav>
+
+<div style="background: var(--clr-bg); padding: 0;">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="homepage-redesign-mockup.html">Home</a>
+      <span>›</span>
+      <a href="#">Hot Sauces</a>
+      <span>›</span>
+      Ol' Bricktucky
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="product-main">
+
+    <!-- GALLERY -->
+    <div>
+      <div class="gallery__main">
+        <div class="gallery__badge">Best Seller</div>
+        <img
+          src="https://cdn.shopify.com/s/files/1/0445/5769/7175/products/Benitos-Ol-Brick-Tucky_1710x1710_7216ec6e-6677-42d3-9e8e-6900e26d265b.png?v=1602876330"
+          alt="Ol' Bricktucky 8oz bottle"
+          loading="eager"
+        >
+      </div>
+      <div class="gallery__thumbs">
+        <div class="gallery__thumb active">🍶</div>
+        <div class="gallery__thumb">🧄</div>
+        <div class="gallery__thumb">🍳</div>
+        <div class="gallery__thumb">🌿</div>
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+
+      <div class="product-info__collection">Benito's Hot Sauce</div>
+      <h1 class="product-info__title">Ol' Bricktucky</h1>
+      <p class="product-info__subtitle">Vermont's classic salt & vinegar hot sauce, made with organic 12-grain vinegar</p>
+
+      <div class="product-rating">
+        <span class="stars">★★★★★</span>
+        <span class="rating-count"><a href="#reviews">47 reviews</a></span>
+      </div>
+
+      <div class="product-price">
+        <span class="price-main">$9.99</span>
+        <span class="price-size">/ 8 oz.</span>
+      </div>
+
+      <!-- HEAT SCALE — KEY IMPROVEMENT -->
+      <div class="heat-section">
+        <div class="heat-section__header">
+          <span class="heat-section__title">Heat Level</span>
+          <span class="heat-section__level">🔥🔥 Medium-Mild (2/5)</span>
+        </div>
+
+        <div class="heat-bar-wrapper">
+          <div class="heat-bar-track">
+            <div class="heat-bar-mask" style="width: 60%;"></div>
+          </div>
+          <div class="heat-bar-marker" style="left: 40%;"></div>
+        </div>
+
+        <div class="heat-labels">
+          <span>Mild</span>
+          <span>Medium</span>
+          <span>Hot</span>
+          <span>Very Hot</span>
+          <span>Extreme</span>
+        </div>
+
+        <div class="heat-comparisons">
+          <span class="heat-chip heat-chip--context">Hotter than Tabasco</span>
+          <span class="heat-chip heat-chip--context">Milder than jalapeño</span>
+          <span class="heat-chip heat-chip--scoville">~2,000 Scoville</span>
+          <span class="heat-chip heat-chip--context">Great for everyday use</span>
+        </div>
+      </div>
+
+      <!-- FLAVOR PROFILE -->
+      <div class="flavor-profile">
+        <div class="flavor-profile__title">Flavor Profile</div>
+        <div class="flavor-bars">
+          <div class="flavor-bar">
+            <span class="flavor-bar__label">Vinegar</span>
+            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:90%; background: #E8A020;"></div></div>
+            <span class="flavor-bar__val">High</span>
+          </div>
+          <div class="flavor-bar">
+            <span class="flavor-bar__label">Garlic</span>
+            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:75%; background: #627647;"></div></div>
+            <span class="flavor-bar__val">Strong</span>
+          </div>
+          <div class="flavor-bar">
+            <span class="flavor-bar__label">Heat</span>
+            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:40%; background: #E85D26;"></div></div>
+            <span class="flavor-bar__val">Mild</span>
+          </div>
+          <div class="flavor-bar">
+            <span class="flavor-bar__label">Salt</span>
+            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:60%; background: #8A7A6A;"></div></div>
+            <span class="flavor-bar__val">Medium</span>
+          </div>
+          <div class="flavor-bar">
+            <span class="flavor-bar__label">Sweetness</span>
+            <div class="flavor-bar__track"><div class="flavor-bar__fill" style="width:15%; background: #F5A623;"></div></div>
+            <span class="flavor-bar__val">Low</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PURCHASE -->
+      <div class="purchase-section">
+        <div class="purchase-section__label">Quantity</div>
+        <div class="qty-row">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <div class="qty-num" id="qty-num">1</div>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <button class="btn-add-to-cart" onclick="addToCart()">
+            🛒 Add to Cart
+          </button>
+        </div>
+        <button class="btn-buy-now">Buy It Now</button>
+
+        <div class="shipping-bar">
+          <div class="shipping-bar__text">
+            Add <strong>$40.01 more</strong> to unlock free shipping 🚚
+          </div>
+          <div class="shipping-bar__track">
+            <div class="shipping-bar__fill" id="ship-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRUST MICRO-COPY -->
+      <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--clr-muted); font-family:var(--font-display); font-weight:700;">
+        <span>🌿 Non-GMO</span>
+        <span>🚫 No Preservatives</span>
+        <span>🧑‍🌾 Vermont Made</span>
+        <span>🔥 Small Batch</span>
+      </div>
+
+      <!-- PRODUCT TABS -->
+      <div class="product-tabs">
+        <div class="tabs-nav">
+          <button class="tab-btn active" onclick="switchTab(this,'desc')">Description</button>
+          <button class="tab-btn" onclick="switchTab(this,'ingredients')">Ingredients</button>
+          <button class="tab-btn" onclick="switchTab(this,'pairs')">What's Good On It</button>
+        </div>
+
+        <div class="tab-content active" id="tab-desc">
+          <p>Our classic Appalachian salt n' vinegar style hot sauce. It's got that "vinegar forward" flavor, made with a 12 grain organic vinegar with the perfect balance of fresh garlic and sea salt from the coast of Maine.</p>
+          <p>Absolutely sensational on eggs, tacos, chicken, steaks, pizza, and almost anything you throw at it. A true all-purpose table sauce that earns its spot next to the salt and pepper.</p>
+          <p>Made with organically sourced chiles from Vermont farms. Zero fillers, zero xanthan gum, zero preservatives. Just real vegetables and real flavor.</p>
+        </div>
+
+        <div class="tab-content" id="tab-ingredients">
+          <p><strong>Ingredients:</strong></p>
+          <ul>
+            <li>Organic cayenne peppers (Vermont-grown)</li>
+            <li>Organic 12-grain vinegar</li>
+            <li>Sea salt (Maine coast)</li>
+            <li>Fresh garlic</li>
+            <li>Onion</li>
+          </ul>
+          <p style="margin-top:16px; font-style:italic; font-size:13px;">No xanthan gum, guar gum, starches, pepper mash, HFC corn syrup, artificial flavors, or preservatives.</p>
+        </div>
+
+        <div class="tab-content" id="tab-pairs">
+          <ul>
+            <li>🍳 Scrambled or fried eggs — the classic move</li>
+            <li>🌮 Tacos al pastor, fish tacos, carnitas</li>
+            <li>🍕 Pizza (especially pepperoni or veggie)</li>
+            <li>🥩 Grilled steak or chicken</li>
+            <li>🥗 Grain bowls and roasted veggie plates</li>
+            <li>🍟 French fries, tater tots, hash browns</li>
+            <li>🌯 Burritos and breakfast sandwiches</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- UPSELL -->
+  <div class="upsell">
+    <div class="upsell__title">🔥 Frequently Bought Together</div>
+    <div class="upsell-items">
+      <div class="upsell-item">
+        <div class="upsell-item__img">🍁</div>
+        <div>
+          <div class="upsell-item__name">Habanero Maple Syrup</div>
+          <div class="upsell-item__price">$8.99 · 5 oz.</div>
+        </div>
+        <div class="upsell-item__add">＋</div>
+      </div>
+      <div class="upsell-item">
+        <div class="upsell-item__img">🌶️</div>
+        <div>
+          <div class="upsell-item__name">Chipotle Grande</div>
+          <div class="upsell-item__price">$8.69 · 5 oz.</div>
+        </div>
+        <div class="upsell-item__add">＋</div>
+      </div>
+      <div class="upsell-item" style="border-color: var(--clr-fire); background: #FFF5F0;">
+        <div class="upsell-item__img">📦</div>
+        <div>
+          <div class="upsell-item__name">Build a 6-Pack Bundle</div>
+          <div class="upsell-item__price" style="color: var(--clr-fire);">Save 10% · Mix &amp; match</div>
+        </div>
+        <div class="upsell-item__add" style="color: var(--clr-fire);">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="reviews-section" id="reviews">
+    <div class="reviews-header">
+      <div class="reviews-title">Customer Reviews</div>
+      <div class="reviews-summary">
+        <div>
+          <div class="reviews-big-num">4.9</div>
+          <div class="reviews-stars-big">★★★★★</div>
+          <div style="font-size:13px; color:var(--clr-muted);">47 reviews</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-grid">
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__name">Mike T. — Burlington, VT</div>
+          <div class="review-card__date">June 2026</div>
+        </div>
+        <div class="review-card__stars">★★★★★</div>
+        <div class="review-card__text">Been buying this since 2019 and go through at least a bottle a month. The vinegar hit is perfect — not too sharp, not too tame. Goes on literally everything in our house. Bought 6 last time to save on shipping.</div>
+        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__name">Sarah K. — Portland, ME</div>
+          <div class="review-card__date">May 2026</div>
+        </div>
+        <div class="review-card__stars">★★★★★</div>
+        <div class="review-card__text">Discovered this at a farmers market in Stowe and immediately ordered more online. The garlic really comes through and the salt quality is noticeable. Nothing artificial and you can tell. Best everyday hot sauce I've found.</div>
+        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__name">Dave R. — Boston, MA</div>
+          <div class="review-card__date">April 2026</div>
+        </div>
+        <div class="review-card__stars">★★★★★</div>
+        <div class="review-card__text">Ordered this as a gift basket add-on and had to buy myself a bottle too. Great heat level for people who want flavor, not just burn. Already ordered the Mango Habanero and the Ghost Pepper Maple Syrup.</div>
+        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__name">Jess M. — Montpelier, VT</div>
+          <div class="review-card__date">March 2026</div>
+        </div>
+        <div class="review-card__stars">★★★★★</div>
+        <div class="review-card__text">The fact that Benito sources from local farms and bottles this himself shows. The freshness is unreal compared to big grocery store sauces. Supporting a Vermont business too — easy choice.</div>
+        <span class="review-card__product-tag">Ol' Bricktucky 8oz</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 64px;"></div>
+</div>
+
+<script>
+  let qty = 1;
+  function changeQty(delta) {
+    qty = Math.max(1, qty + delta);
+    document.getElementById('qty-num').textContent = qty;
+    // Update shipping bar
+    const subtotal = qty * 9.99;
+    const progress = Math.min(100, (subtotal / 50) * 100);
+    document.getElementById('ship-bar').style.width = progress + '%';
+    const remaining = Math.max(0, 50 - subtotal).toFixed(2);
+    const bar = document.querySelector('.shipping-bar__text');
+    if (remaining <= 0) {
+      bar.innerHTML = '<strong style="color:var(--clr-green)">🚚 Free shipping unlocked!</strong>';
+    } else {
+      bar.innerHTML = `Add <strong>$${remaining} more</strong> to unlock free shipping 🚚`;
+    }
+  }
+
+  function addToCart() {
+    const btn = document.querySelector('.btn-add-to-cart');
+    btn.textContent = '✓ Added!';
+    btn.style.background = 'var(--clr-green)';
+    setTimeout(() => {
+      btn.innerHTML = '🛒 Add to Cart';
+      btn.style.background = '';
+    }, 1500);
+  }
+
+  function switchTab(btn, tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tabId).classList.add('active');
+  }
+</script>
+
+</body>
+</html>
