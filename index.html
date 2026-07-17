@@ -177,37 +177,46 @@
     .nav__cart-btn:hover { background: var(--clr-fire-dark); }
 
     /* ===== HERO ===== */
+    /* Hero height locks to the photo's aspect ratio so the ENTIRE image is
+       always visible and scales with the window — no cropping at any size */
     .hero {
       position: relative;
-      min-height: 520px;
+      aspect-ratio: 1568 / 672;
       background: var(--clr-charcoal);
-      display: flex;
-      align-items: center;
       overflow: hidden;
     }
     .hero__bg {
       position: absolute;
       inset: 0;
-      background-image: url('https://v3b.fal.media/files/b/0aa292f1/1tlEGBuzPEZsOcb3x52VB_2iTWes5Q.png');
+      background-image: url('https://v3b.fal.media/files/b/0aa2a355/dHPIqVK96iNru82bin1YL_775a7c00e9384965abd1aed0460a88f0.png');
       background-size: cover;
-      background-position: 30% center;
+      background-position: center;
     }
-    /* Gradient on left so text box area is darker and more legible */
+    /* Soft gradient only over the clear left area so text stays legible
+       without darkening the pepper basket */
     .hero__bg::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to right, rgba(5,2,0,0.55) 0%, rgba(5,2,0,0.25) 50%, transparent 100%);
+      background: linear-gradient(to right, rgba(5,2,0,0.5) 0%, rgba(5,2,0,0.18) 38%, transparent 55%);
     }
     .hero__content {
-      position: relative;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 2;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: var(--space-xl) var(--space-lg);
+      padding: 0 var(--space-lg);
       width: 44%;
       max-width: 520px;
+    }
+    /* Narrow screens: photo keeps its full-width aspect box, text stacks below */
+    @media (max-width: 1080px) {
+      .hero { aspect-ratio: auto; }
+      .hero__bg { position: relative; inset: auto; aspect-ratio: 1568 / 672; }
+      .hero__content { position: static; transform: none; width: auto; max-width: none; padding: var(--space-lg); }
     }
     .hero__text-box {
       background: rgba(10, 5, 0, 0.72);
@@ -215,7 +224,7 @@
       -webkit-backdrop-filter: blur(2px);
       border-left: 4px solid var(--clr-fire);
       border-radius: 6px;
-      padding: 24px 28px 28px;
+      padding: 16px 24px 18px;
       display: inline-flex;
       flex-direction: column;
       gap: 0;
@@ -243,7 +252,7 @@
     }
     .hero__title {
       font-family: var(--font-headline);
-      font-size: clamp(36px, 4.5vw, 62px);
+      font-size: clamp(32px, 3.8vw, 54px);
       font-weight: 400;
       line-height: 1.1;
       color: var(--clr-cream);
@@ -1094,7 +1103,7 @@
         </a>
       </div>
       <!-- Vermont provenance badge — echoes label's circular Made in Vermont stamp -->
-      <div style="margin-top:20px; display:inline-flex; align-items:center; gap:12px;">
+      <div style="margin-top:12px; display:inline-flex; align-items:center; gap:12px;">
         <svg width="58" height="58" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <circle cx="32" cy="32" r="29" fill="none" stroke="#3E6B2E" stroke-width="2"/>
           <circle cx="32" cy="32" r="24" fill="none" stroke="#3E6B2E" stroke-width="0.8"/>
